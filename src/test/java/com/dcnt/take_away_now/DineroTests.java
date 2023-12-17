@@ -1,7 +1,8 @@
 package com.dcnt.take_away_now;
 
-import domain.Dinero;
+import value_object.Dinero;
 import org.junit.jupiter.api.Test;
+import value_object.converter.DineroAttributeConverter;
 
 import java.math.BigDecimal;
 
@@ -45,9 +46,7 @@ class DineroTests {
         Dinero dosPesos = new Dinero(2);
 
         // when: "lo multiplico por cero"
-        assertThatThrownBy(() -> {
-            dosPesos.multiply(0);
-        })
+        assertThatThrownBy(() -> dosPesos.multiply(0))
 
         // then: "obtengo cero pesos"
         .isInstanceOf(IllegalStateException.class)
@@ -60,9 +59,7 @@ class DineroTests {
         Dinero dosPesos = new Dinero(2);
 
         // when: "lo multiplico por menos uno"
-        assertThatThrownBy(() -> {
-            dosPesos.multiply(-1);
-        })
+        assertThatThrownBy(() -> dosPesos.multiply(-1))
 
         // then: "obtengo menos dos pesos"
         .isInstanceOf(IllegalStateException.class)
@@ -78,7 +75,33 @@ class DineroTests {
         // when: "al restarlos"
         Dinero montoNegativo = dosPesos.minus(tresPesos);
 
-        // then: "lanza exepcion"
+        // then: "lanza excepción"
         assertThat(montoNegativo.getMonto()).isEqualTo(new BigDecimal(-1));
+    }
+
+    @Test
+    void conviertoDosPesosEnDineroABigDecimal() {
+        // given: "dado dos pesos"
+        Dinero dosPesos = new Dinero(2);
+        DineroAttributeConverter attributeConverter = new DineroAttributeConverter();
+
+        // when: "al convertirlo a columna de la bd"
+        BigDecimal dosPesosMonto = attributeConverter.convertToDatabaseColumn(dosPesos);
+
+        // then: "obtengo un big decimal con val = 2"
+        assertThat(dosPesosMonto).isEqualTo(new BigDecimal(2));
+    }
+
+    @Test
+    void conviertoVariableBigDecimalConValIgualADosAValueObjectDineroConMontoIgualADos() {
+        // given: "dado una variable BigDecimal con val igual a dos"
+        BigDecimal val = new BigDecimal(2);
+        DineroAttributeConverter attributeConverter = new DineroAttributeConverter();
+
+        // when: "al convertirlo a un value object"
+        Dinero dosPesos = attributeConverter.convertToEntityAttribute(val);
+
+        // then: "obtengo un big decimal con val = 2"
+        assertThat(dosPesos).isEqualTo(new Dinero(2));
     }
 }

@@ -1,9 +1,8 @@
-package domain;
+package value_object;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
 
@@ -15,6 +14,10 @@ public class Dinero implements Comparable<Dinero> {
 
     public Dinero(int i) {
         this.monto = BigDecimal.valueOf(i);
+    }
+
+    public BigDecimal toBigDecimal() {
+        return getMonto();
     }
 
     /**
