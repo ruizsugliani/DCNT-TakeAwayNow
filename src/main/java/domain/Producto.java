@@ -25,6 +25,9 @@ public class Producto {
     @JoinColumn(name = "ID_INVENTARIO_REGISTRO")
     private InventarioRegistro inventarioRegistro;
 
+    public Producto(String nombre) {
+        this.nombre = nombre;
+    }
     /*public Producto(String nombre, Integer montoPrecio, Integer cantidadPuntosDeConfianza) {
         if (montoPrecio <= 0) {
             throw new IllegalStateException("Un producto no puede ser creado con un precio menor o igual a cero.");

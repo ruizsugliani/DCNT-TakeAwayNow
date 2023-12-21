@@ -1,5 +1,6 @@
 package domain;
 
+import dto.InventarioRegistroDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,7 +30,7 @@ public class InventarioRegistro {
     private Producto producto;
 
     @Column(name="STOCK")
-    private Long Stock;
+    private Long stock;
 
     @Column(name="PRECIO_UNITARIO")
     @Convert(converter = DineroAttributeConverter.class)
@@ -38,4 +39,10 @@ public class InventarioRegistro {
     @Column(name="RECOMPENSA_PDC")
     @Convert(converter = PuntosDeConfianzaAttributeConverter.class)
     private PuntosDeConfianza recompensaPuntosDeConfianza;
+
+    public InventarioRegistro(InventarioRegistroDto dto) {
+        this.stock = dto.getStock();
+        this.precio = dto.getPrecio();
+        this.recompensaPuntosDeConfianza = dto.getRecompensaPuntosDeConfianza();
+    }
 }

@@ -24,7 +24,7 @@ public class Negocio {
     public String nombre;
     @Column(name="SALDO")
     @Convert(converter = DineroAttributeConverter.class)
-    public Dinero precio;
+    public Dinero saldo;
     @Column(name="DIA_APERTURA")
     public DayOfWeek diaDeApertura;
     @Column(name="DIA_CIERRE")
@@ -59,6 +59,7 @@ public class Negocio {
         this.horarioDeCierre = horarioDeCierre;
         this.diaDeApertura = diaDeApertura;
         this.diaDeCierre = diaDeCierre;
+        this.saldo = new Dinero(0);
     }
 
     /**
