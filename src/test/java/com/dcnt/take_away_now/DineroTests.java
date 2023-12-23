@@ -1,8 +1,8 @@
 package com.dcnt.take_away_now;
 
-import value_object.Dinero;
+import com.dcnt.take_away_now.value_object.Dinero;
 import org.junit.jupiter.api.Test;
-import value_object.converter.DineroAttributeConverter;
+import com.dcnt.take_away_now.value_object.converter.DineroAttributeConverter;
 
 import java.math.BigDecimal;
 

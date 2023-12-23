@@ -1,8 +1,8 @@
-package value_object.converter;
+package com.dcnt.take_away_now.value_object.converter;
 
+import com.dcnt.take_away_now.value_object.Dinero;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import value_object.Dinero;
 
 import java.math.BigDecimal;
 @Converter

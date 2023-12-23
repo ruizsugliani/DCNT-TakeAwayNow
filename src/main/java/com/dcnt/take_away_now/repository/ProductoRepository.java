@@ -1,6 +1,6 @@
-package repository;
+package com.dcnt.take_away_now.repository;
 
-import domain.Producto;
+import com.dcnt.take_away_now.domain.Producto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

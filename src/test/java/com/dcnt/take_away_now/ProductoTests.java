@@ -1,11 +1,6 @@
 package com.dcnt.take_away_now;
 
-import domain.Producto;
 import org.junit.jupiter.api.Test;
-import value_object.Dinero;
-import value_object.PuntosDeConfianza;
-
-import java.math.BigDecimal;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;

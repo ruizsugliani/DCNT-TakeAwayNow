@@ -1,6 +1,6 @@
 package com.dcnt.take_away_now;
 
-import domain.Negocio;
+import com.dcnt.take_away_now.domain.Negocio;
 import org.junit.jupiter.api.Test;
 
 import java.time.DayOfWeek;

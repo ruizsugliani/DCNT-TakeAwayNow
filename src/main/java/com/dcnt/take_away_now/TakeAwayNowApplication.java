@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @SpringBootApplication
-@EntityScan("domain")
+@EntityScan("com/dcnt/take_away_now/domain")
 public class TakeAwayNowApplication {
 
 	public static void main(String[] args) {

@@ -1,14 +1,14 @@
-package domain;
+package com.dcnt.take_away_now.domain;
 
-import dto.InventarioRegistroDto;
+import com.dcnt.take_away_now.dto.InventarioRegistroDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import value_object.Dinero;
-import value_object.PuntosDeConfianza;
-import value_object.converter.DineroAttributeConverter;
-import value_object.converter.PuntosDeConfianzaAttributeConverter;
+import com.dcnt.take_away_now.value_object.Dinero;
+import com.dcnt.take_away_now.value_object.PuntosDeConfianza;
+import com.dcnt.take_away_now.value_object.converter.DineroAttributeConverter;
+import com.dcnt.take_away_now.value_object.converter.PuntosDeConfianzaAttributeConverter;
 
 @Data
 @AllArgsConstructor

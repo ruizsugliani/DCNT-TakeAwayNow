@@ -1,10 +1,10 @@
-package domain;
+package com.dcnt.take_away_now.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import value_object.Dinero;
-import value_object.converter.DineroAttributeConverter;
+import com.dcnt.take_away_now.value_object.Dinero;
+import com.dcnt.take_away_now.value_object.converter.DineroAttributeConverter;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;

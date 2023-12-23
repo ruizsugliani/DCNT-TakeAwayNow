@@ -1,4 +1,4 @@
-package value_object;
+package com.dcnt.take_away_now.value_object;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

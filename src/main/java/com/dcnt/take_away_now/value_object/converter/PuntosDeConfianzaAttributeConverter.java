@@ -1,8 +1,8 @@
-package value_object.converter;
+package com.dcnt.take_away_now.value_object.converter;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import value_object.PuntosDeConfianza;
+import com.dcnt.take_away_now.value_object.PuntosDeConfianza;
 
 
 @Converter

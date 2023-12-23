@@ -1,10 +1,10 @@
-package dto;
+package com.dcnt.take_away_now.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import value_object.Dinero;
-import value_object.PuntosDeConfianza;
+import com.dcnt.take_away_now.value_object.Dinero;
+import com.dcnt.take_away_now.value_object.PuntosDeConfianza;
 
 @NoArgsConstructor
 @AllArgsConstructor

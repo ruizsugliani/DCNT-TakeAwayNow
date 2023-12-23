@@ -1,13 +1,9 @@
-package domain;
+package com.dcnt.take_away_now.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import value_object.Dinero;
-import value_object.PuntosDeConfianza;
-
-import java.util.Objects;
 
 @Data
 @AllArgsConstructor

@@ -1,13 +1,13 @@
-package service;
+package com.dcnt.take_away_now.service;
 
-import domain.Negocio;
-import domain.Producto;
-import domain.InventarioRegistro;
-import dto.InventarioRegistroDto;
+import com.dcnt.take_away_now.domain.Negocio;
+import com.dcnt.take_away_now.domain.Producto;
+import com.dcnt.take_away_now.domain.InventarioRegistro;
+import com.dcnt.take_away_now.dto.InventarioRegistroDto;
 import org.springframework.stereotype.Service;
-import repository.InventarioRegistroRepository;
-import repository.NegocioRepository;
-import repository.ProductoRepository;
+import com.dcnt.take_away_now.repository.InventarioRegistroRepository;
+import com.dcnt.take_away_now.repository.NegocioRepository;
+import com.dcnt.take_away_now.repository.ProductoRepository;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -33,13 +33,11 @@ public class NegocioService {
 
     public Negocio crearNegocio(
             String nombre,
-            LocalTime horarioDeApertura,
-            LocalTime horarioDeCierre,
             DayOfWeek diaDeApertura,
             DayOfWeek diaDeCierre
     ) {
         return this.negocioRepository.save(
-                new Negocio(nombre, horarioDeApertura, horarioDeCierre, diaDeApertura, diaDeCierre)
+                new Negocio(nombre, LocalTime.of(9,0), LocalTime.of(18,0), diaDeApertura, diaDeCierre)
         );
     }
 
@@ -47,7 +45,7 @@ public class NegocioService {
         return negocioRepository.findAll();
     }
 
-    public void crearProducto(
+    public Producto crearProducto(
             Long negocioId,
             String nombreDelProducto,
             InventarioRegistroDto inventarioRegistroDto
@@ -55,7 +53,7 @@ public class NegocioService {
         // TODO Corroboramos que exista el negocio y ver qué devolver.
         Optional<Negocio> optionalNegocio = negocioRepository.findById(negocioId);
         if (optionalNegocio.isEmpty()) {
-            return;
+            return new Producto();
         }
         Negocio negocioExistente = optionalNegocio.get();
         // TODO Corroboramos que no exista un producto con el nombre pasado por parámetro para este negocio.
@@ -67,12 +65,16 @@ public class NegocioService {
         InventarioRegistro nuevoInventarioRegistro = new InventarioRegistro(inventarioRegistroDto);
 
         nuevoProducto.setInventarioRegistro(nuevoInventarioRegistro);
+        productoRepository.save(nuevoProducto);
+
+        negocioExistente.getInventarioRegistros().add(nuevoInventarioRegistro);
+        negocioRepository.save(negocioExistente);
+
         nuevoInventarioRegistro.setProducto(nuevoProducto);
         nuevoInventarioRegistro.setNegocio(negocioExistente);
-        negocioExistente.getInventarioRegistros().add(nuevoInventarioRegistro);
-
-        productoRepository.save(nuevoProducto);
         inventarioRegistroRepository.save(nuevoInventarioRegistro);
-        negocioRepository.save(negocioExistente);
+
+        return nuevoProducto;
     }
+
 }
