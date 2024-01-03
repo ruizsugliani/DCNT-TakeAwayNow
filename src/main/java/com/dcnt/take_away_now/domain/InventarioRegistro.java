@@ -22,11 +22,11 @@ public class InventarioRegistro {
     private Long id;
 
     @ManyToOne(targetEntity = Negocio.class)
-    @JoinColumn(name = "ID_NEGOCIO")
+    @JoinColumn(name = "ID_NEGOCIO", nullable = true)
     private Negocio negocio;
 
     @OneToOne(targetEntity = Producto.class,cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "ID_PRODUCTO")
+    @JoinColumn(name = "ID_PRODUCTO", nullable = true)
     private Producto producto;
 
     @Column(name="STOCK")

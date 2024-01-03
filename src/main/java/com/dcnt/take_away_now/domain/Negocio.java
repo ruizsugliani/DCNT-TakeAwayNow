@@ -1,5 +1,6 @@
 package com.dcnt.take_away_now.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,7 +34,8 @@ public class Negocio {
     public LocalTime horarioDeApertura;
     @Column(name="HORARIO_CIERRE")
     public LocalTime horarioDeCierre;
-    @OneToMany(targetEntity = InventarioRegistro.class, fetch = FetchType.LAZY, mappedBy = "negocio")
+    @JsonBackReference
+    @OneToMany(targetEntity = InventarioRegistro.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "negocio")
     private List<InventarioRegistro> inventarioRegistros;
     //@OneToMany(targetEntity = Pedido.class, fetch = FetchType.LAZY, mappedBy = "negocio")
     //private List<Pedido> pedidos;
@@ -85,6 +87,12 @@ public class Negocio {
                         && (horarioIngresado.isAfter(horarioDeApertura) || horarioIngresado.equals(horarioDeApertura))
                         && (horarioIngresado.isBefore(horarioDeCierre) || horarioIngresado.equals(horarioDeCierre))
         );
+    }
+
+    public void registrarProductoEnInventario(InventarioRegistro inventarioRegistro) {
+        if (inventarioRegistros != null) {
+            inventarioRegistros.add(inventarioRegistro);
+        }
     }
 
     /*

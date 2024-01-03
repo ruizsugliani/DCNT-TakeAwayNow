@@ -5,14 +5,13 @@ import com.dcnt.take_away_now.domain.Producto;
 import com.dcnt.take_away_now.dto.InventarioRegistroDto;
 import com.dcnt.take_away_now.value_object.Dinero;
 import com.dcnt.take_away_now.value_object.PuntosDeConfianza;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.dcnt.take_away_now.service.NegocioService;
 
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
-import java.time.LocalTime;
 import java.util.Collection;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -42,7 +41,7 @@ public class NegocioController {
 
     @PostMapping("/{negocioId}/productos/")
     @ResponseStatus(HttpStatus.CREATED)
-    public Producto crearProducto(
+    public ResponseEntity<org.apache.hc.core5.http.HttpStatus> crearProducto(
             @PathVariable Long negocioId,
             @RequestParam String nombreDelProducto,
             @RequestParam Long stock,
@@ -50,5 +49,13 @@ public class NegocioController {
             @RequestParam Integer recompensaPuntosDeConfianza
     ) {
         return negocioService.crearProducto(negocioId, nombreDelProducto, new InventarioRegistroDto(stock, new Dinero(precio), new PuntosDeConfianza(recompensaPuntosDeConfianza)));
+    }
+
+    @PostMapping("/{negocioId}/productos/{productoId}")
+    public ResponseEntity<org.apache.hc.core5.http.HttpStatus> eliminarProducto(
+            @PathVariable Long negocioId,
+            @PathVariable Long productoId
+    ) {
+        return negocioService.eliminarProducto(negocioId, productoId);
     }
 }

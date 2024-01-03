@@ -1,5 +1,6 @@
 package com.dcnt.take_away_now.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +18,8 @@ public class Producto {
     private Long id;
     @Column(name="NOMBRE")
     public String nombre;
-    @OneToOne(targetEntity = InventarioRegistro.class)
+    @JsonBackReference
+    @OneToOne(targetEntity = InventarioRegistro.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "ID_INVENTARIO_REGISTRO")
     private InventarioRegistro inventarioRegistro;
 
