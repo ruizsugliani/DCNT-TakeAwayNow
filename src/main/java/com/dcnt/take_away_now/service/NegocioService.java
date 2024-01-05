@@ -4,6 +4,7 @@ import com.dcnt.take_away_now.domain.InventarioRegistro;
 import com.dcnt.take_away_now.domain.Negocio;
 import com.dcnt.take_away_now.domain.Producto;
 import com.dcnt.take_away_now.dto.InventarioRegistroDto;
+import com.dcnt.take_away_now.dto.ProductoDto;
 import com.dcnt.take_away_now.repository.InventarioRegistroRepository;
 import com.dcnt.take_away_now.repository.NegocioRepository;
 import com.dcnt.take_away_now.repository.ProductoRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.Collection;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -33,14 +35,21 @@ public class NegocioService {
         this.productoRepository = productoRepository;
     }
 
-    public Negocio crearNegocio(
+    public ResponseEntity<HttpStatus> crearNegocio(
             String nombre,
             DayOfWeek diaDeApertura,
             DayOfWeek diaDeCierre
     ) {
-        return this.negocioRepository.save(
+        // TODO verificar si no existe un negocio con ese nombre.
+        Optional<Negocio> optionalNegocio = negocioRepository.findByNombre(nombre);
+        if (optionalNegocio.isPresent()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        this.negocioRepository.save(
                 new Negocio(nombre, LocalTime.of(9,0), LocalTime.of(18,0), diaDeApertura, diaDeCierre)
         );
+        return ResponseEntity.ok().build();
     }
 
     public Collection<Negocio> obtenerNegocios() {
@@ -103,5 +112,16 @@ public class NegocioService {
         // Borramos el producto de su respectiva tabla.
         productoRepository.deleteById(OptProducto.get().getId());
         return ResponseEntity.ok().build();
+    }
+
+    public Collection<ProductoDto> obtenerProductos(Long negocioId) {
+        Optional<Negocio> optionalNegocio = negocioRepository.findById(negocioId);
+
+        // Corroboramos la existencia del negocio.
+        if (optionalNegocio.isEmpty()) {
+            throw new NoSuchElementException("No existe el negocio al cual se solicitó obtener sus productos.");
+        }
+
+        return inventarioRegistroRepository.obtenerProductosDelNegocio(negocioId);
     }
 }
