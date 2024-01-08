@@ -8,6 +8,7 @@ import com.dcnt.take_away_now.dto.ProductoDto;
 import com.dcnt.take_away_now.repository.InventarioRegistroRepository;
 import com.dcnt.take_away_now.repository.NegocioRepository;
 import com.dcnt.take_away_now.repository.ProductoRepository;
+import lombok.AllArgsConstructor;
 import org.apache.hc.core5.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,23 +18,12 @@ import java.time.LocalTime;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-
+@AllArgsConstructor
 @Service
 public class NegocioService {
     private final NegocioRepository negocioRepository;
     private final InventarioRegistroRepository inventarioRegistroRepository;
     private final ProductoRepository productoRepository;
-
-
-    public NegocioService(
-            NegocioRepository negocioRepository,
-            InventarioRegistroRepository inventarioRegistroRepository,
-            ProductoRepository productoRepository
-    ) {
-        this.negocioRepository = negocioRepository;
-        this.inventarioRegistroRepository = inventarioRegistroRepository;
-        this.productoRepository = productoRepository;
-    }
 
     public ResponseEntity<HttpStatus> crearNegocio(
             String nombre,
