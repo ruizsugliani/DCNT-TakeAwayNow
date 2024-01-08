@@ -8,11 +8,14 @@ import com.dcnt.take_away_now.dto.ProductoDto;
 import com.dcnt.take_away_now.repository.InventarioRegistroRepository;
 import com.dcnt.take_away_now.repository.NegocioRepository;
 import com.dcnt.take_away_now.repository.ProductoRepository;
+import com.dcnt.take_away_now.value_object.Dinero;
+import com.dcnt.take_away_now.value_object.PuntosDeConfianza;
 import lombok.AllArgsConstructor;
 import org.apache.hc.core5.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.Collection;
@@ -28,16 +31,25 @@ public class NegocioService {
     public ResponseEntity<HttpStatus> crearNegocio(
             String nombre,
             DayOfWeek diaDeApertura,
-            DayOfWeek diaDeCierre
+            DayOfWeek diaDeCierre,
+            int horaApertura,
+            int minutoApertura,
+            int horaCierre,
+            int minutoCierre
     ) {
-        // TODO verificar si no existe un negocio con ese nombre.
         Optional<Negocio> optionalNegocio = negocioRepository.findByNombre(nombre);
         if (optionalNegocio.isPresent()) {
             return ResponseEntity.badRequest().build();
         }
 
         this.negocioRepository.save(
-                new Negocio(nombre, LocalTime.of(9,0), LocalTime.of(18,0), diaDeApertura, diaDeCierre)
+                new Negocio(
+                        nombre,
+                        LocalTime.of(horaApertura,minutoApertura),
+                        LocalTime.of(horaCierre,minutoCierre),
+                        diaDeApertura,
+                        diaDeCierre
+                )
         );
         return ResponseEntity.ok().build();
     }
@@ -113,5 +125,80 @@ public class NegocioService {
         }
 
         return inventarioRegistroRepository.obtenerProductosDelNegocio(negocioId);
+    }
+
+    public ResponseEntity<HttpStatus> modificarInventarioRegistro(
+            Long negocioId,
+            Long productoId,
+            Long stock,
+            BigDecimal precio,
+            Integer recompensaPuntosDeConfianza
+    ) {
+        // Corroboramos la existencia del negocio.
+        Optional<Negocio> optionalNegocio = negocioRepository.findById(negocioId);
+        if (optionalNegocio.isEmpty()) {
+            throw new NoSuchElementException("No existe el negocio al cual se solicitó modificar uno de sus productos.");
+        }
+
+        // Corroboramos la existencia del producto.
+        Optional<Producto> optionalProducto = productoRepository.findById(productoId);
+        if (optionalProducto.isEmpty()) {
+            throw new NoSuchElementException("No existe el producto al cual se solicitó modificar.");
+        }
+
+        // Corroboramos que exista la relación entre el negocio y el producto en cuestión.
+        Optional<InventarioRegistro> optInventarioRegistro = inventarioRegistroRepository.findByNegocioAndProducto(optionalNegocio.get(), optionalProducto.get());
+        if (optInventarioRegistro.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Finalmente modificamos el registro.
+        InventarioRegistro inventarioRegistroExistente = optInventarioRegistro.get();
+        inventarioRegistroExistente.setStock(stock);
+        inventarioRegistroExistente.setPrecio(new Dinero(precio));
+        inventarioRegistroExistente.setRecompensaPuntosDeConfianza(new PuntosDeConfianza(recompensaPuntosDeConfianza));
+        inventarioRegistroRepository.save(inventarioRegistroExistente);
+
+        return ResponseEntity.accepted().build();
+    }
+
+    public ResponseEntity<HttpStatus> modificarHorariosDelNegocio(Long negocioId, int horaApertura, int minutoApertura, int horaCierre, int minutoCierre) {
+        LocalTime horarioApertura = LocalTime.of(horaApertura, minutoApertura);
+        LocalTime horarioCierre = LocalTime.of(horaCierre, minutoCierre);
+
+        // El horario de apertura debe ser anterior al de cierre.
+        if (horarioApertura.isAfter(horarioCierre)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        // No existe el negocio para el cual se solicita cambiar el horario.
+        Optional<Negocio> optionalNegocio = negocioRepository.findById(negocioId);
+        if (optionalNegocio.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Negocio negocioExistente =  optionalNegocio.get();
+        negocioExistente.setHorarioDeApertura(horarioApertura);
+        negocioExistente.setHorarioDeCierre(horarioCierre);
+
+        negocioRepository.save(negocioExistente);
+
+        return ResponseEntity.accepted().build();
+    }
+
+    public ResponseEntity<HttpStatus> modificarDiasDeAperturaDelNegocio(Long negocioId, DayOfWeek diaDeApertura, DayOfWeek diaDeCierre) {
+        // No existe el negocio para el cual se solicita cambiar el horario.
+        Optional<Negocio> optionalNegocio = negocioRepository.findById(negocioId);
+        if (optionalNegocio.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Negocio negocioExistente =  optionalNegocio.get();
+        negocioExistente.setDiaDeApertura(diaDeApertura);
+        negocioExistente.setDiaDeCierre(diaDeCierre);
+
+        negocioRepository.save(negocioExistente);
+
+        return ResponseEntity.accepted().build();
     }
 }

@@ -24,6 +24,9 @@ public class NegocioController {
         this.negocioService = negocioService;
     }
 
+    /*****************
+     *   Métodos Get *
+     *****************/
     @GetMapping("/{negocioId}/productos")
     public Collection<ProductoDto> obtenerProductos(@PathVariable Long negocioId) {
         return negocioService.obtenerProductos(negocioId);
@@ -34,16 +37,22 @@ public class NegocioController {
         return negocioService.obtenerNegocios();
     }
 
+    /******************
+     *   Métodos Post *
+     ******************/
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<org.apache.hc.core5.http.HttpStatus> crearNegocio(
             @RequestParam String nombre,
             @RequestParam DayOfWeek diaDeApertura,
-            @RequestParam DayOfWeek diaDeCierre
+            @RequestParam DayOfWeek diaDeCierre,
+            @RequestParam int horaApertura,
+            @RequestParam int minutoApertura,
+            @RequestParam int horaCierre,
+            @RequestParam int minutoCierre
     ) {
-        return negocioService.crearNegocio(nombre, diaDeApertura, diaDeCierre);
+        return negocioService.crearNegocio(nombre, diaDeApertura, diaDeCierre, horaApertura, minutoApertura, horaCierre, minutoCierre);
     }
-
     @PostMapping("/{negocioId}/productos/")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<org.apache.hc.core5.http.HttpStatus> crearProducto(
@@ -55,7 +64,43 @@ public class NegocioController {
     ) {
         return negocioService.crearProducto(negocioId, nombreDelProducto, new InventarioRegistroDto(stock, new Dinero(precio), new PuntosDeConfianza(recompensaPuntosDeConfianza)));
     }
+    /*******************
+     *   Métodos Patch *
+     *******************/
+    @PatchMapping("/{negocioId}/productos/{productoId}")
+    public ResponseEntity<org.apache.hc.core5.http.HttpStatus> modificarProducto(
+            @PathVariable Long negocioId,
+            @PathVariable Long productoId,
+            @RequestParam Long stock,
+            @RequestParam BigDecimal precio,
+            @RequestParam Integer recompensaPuntosDeConfianza
+    ) {
+        return negocioService.modificarInventarioRegistro(negocioId, productoId, stock, precio, recompensaPuntosDeConfianza);
+    }
 
+    @PatchMapping("/{negocioId}/horariosDeTrabajo")
+    public ResponseEntity<org.apache.hc.core5.http.HttpStatus> modificarHorariosDelNegocio(
+            @PathVariable Long negocioId,
+            @RequestParam int horaApertura,
+            @RequestParam int minutoApertura,
+            @RequestParam int horaCierre,
+            @RequestParam int minutoCierre
+    ) {
+        return negocioService.modificarHorariosDelNegocio(negocioId, horaApertura, minutoApertura, horaCierre, minutoCierre);
+    }
+
+    @PatchMapping("/{negocioId}/diasDeTrabajo")
+    public ResponseEntity<org.apache.hc.core5.http.HttpStatus> modificarDiasDeAperturaDelNegocio(
+            @PathVariable Long negocioId,
+            @RequestParam DayOfWeek diaDeApertura,
+            @RequestParam DayOfWeek diaDeCierre
+    ) {
+        return negocioService.modificarDiasDeAperturaDelNegocio(negocioId, diaDeApertura, diaDeCierre);
+    }
+
+    /*******************
+    *   Métodos Delete *
+    ********************/
     @DeleteMapping("/{negocioId}/productos/{productoId}")
     public ResponseEntity<org.apache.hc.core5.http.HttpStatus> eliminarProducto(
             @PathVariable Long negocioId,
