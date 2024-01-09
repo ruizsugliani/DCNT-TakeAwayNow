@@ -1,5 +1,6 @@
 package com.dcnt.take_away_now.service;
 
+import com.dcnt.take_away_now.domain.InventarioRegistro;
 import com.dcnt.take_away_now.domain.Negocio;
 import com.dcnt.take_away_now.domain.Producto;
 import com.dcnt.take_away_now.dto.InventarioRegistroDto;
@@ -15,14 +16,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.http.ResponseEntity;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
+import java.math.BigDecimal;
 import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 //@ExtendWith(MockitoExtension.class)
 @DataJpaTest
@@ -48,7 +51,7 @@ class NegocioServiceTest {
         HoraApertura = 9;
         MinutoApertura = 0;
         HoraCierre = 18;
-        MinutoApertura = 0;
+        MinutoCierre = 0;
     }
 
     @Test
@@ -160,6 +163,131 @@ class NegocioServiceTest {
         // then: "se lanza error"
         .isInstanceOf(NoSuchElementException.class)
         .hasMessageContaining("No existe el negocio al cual se solicitó obtener sus productos.");
+    }
+
+    @Test
+    void sePuedeModificarInventarioRegistro() {
+        //given
+        negocioService.crearNegocio("Buffet Paseo Colon", DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        InventarioRegistroDto inventarioRegistroDto = new InventarioRegistroDto(10L, new Dinero(100), new PuntosDeConfianza(20));
+        Optional<Negocio> negocio = negocioRepository.findByNombre("Buffet Paseo Colon");
+        negocioService.crearProducto(negocio.get().getId(), "Pancho",inventarioRegistroDto);
+        Optional<Producto> producto = productoRepository.findByNombre("Pancho");
+        //when
+        negocioService.modificarInventarioRegistro(negocio.get().getId(), producto.get().getId(), 20L, BigDecimal.valueOf(150), 25);
+        //then
+        Optional<InventarioRegistro> optInventarioRegistro = inventarioRegistroRepository.findByNegocioAndProducto(negocio.get(), producto.get());
+        assertThat(optInventarioRegistro.get().getStock()).isEqualTo(20L);
+        assertThat(optInventarioRegistro.get().getPrecio()).isEqualTo(new Dinero(150));
+        assertThat(optInventarioRegistro.get().getRecompensaPuntosDeConfianza()).isEqualTo(new PuntosDeConfianza(25));
+    }
+
+    @Test
+    void noSePuedeModificarInventarioRegistroDeUnNegocioQueNoExiste() {
+        // when: "Se intenta modificar un inventarioRegistro de un negocio que no existe"
+        assertThatThrownBy(
+                () -> {
+                    negocioService.modificarInventarioRegistro(1L,1L,20L,BigDecimal.valueOf(150), 25);
+                }
+        )
+        // then: "se lanza error"
+        .isInstanceOf(NoSuchElementException.class)
+        .hasMessageContaining("No existe el negocio al cual se solicitó modificar uno de sus productos.");
+    }
+    @Test
+    void noSePuedeModificarInventarioRegistroDeUnProductoQueNoExiste() {
+        //given
+        negocioService.crearNegocio("Buffet Paseo Colon", DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        InventarioRegistroDto inventarioRegistroDto = new InventarioRegistroDto(10L, new Dinero(100), new PuntosDeConfianza(20));
+        Optional<Negocio> negocio = negocioRepository.findByNombre("Buffet Paseo Colon");
+        // when: "Se intenta modificar un inventarioRegistro de un producto que no existe"
+        assertThatThrownBy(
+                () -> {
+                    negocioService.modificarInventarioRegistro(negocio.get().getId(),1L,20L,BigDecimal.valueOf(150), 25);
+                }
+        )
+        // then: "se lanza error"
+        .isInstanceOf(NoSuchElementException.class)
+        .hasMessageContaining("No existe el producto al cual se solicitó modificar.");
+    }
+
+    @Test
+    void noSePuedeModificarInventarioRegistroDeUnProductoQueNoTieneRelacionConUnNegocio() {
+        //given
+        negocioService.crearNegocio("Buffet Paseo Colon", DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        negocioService.crearNegocio("Buffet Las Heras", DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        InventarioRegistroDto inventarioRegistroDto = new InventarioRegistroDto(10L, new Dinero(100), new PuntosDeConfianza(20));
+        Optional<Negocio> paseoColon = negocioRepository.findByNombre("Buffet Las Heras");
+        negocioService.crearProducto(paseoColon.get().getId(), "Pancho",inventarioRegistroDto);
+        Optional<Producto> producto = productoRepository.findByNombre("Pancho");
+        Optional<Negocio> lasHeras = negocioRepository.findByNombre("Buffet Las Heras");
+
+        // when: "Se intenta modificar un inventarioRegistro de un producto que no tiene relacion con el negocio"
+        ResponseEntity<HttpStatus> status = negocioService.modificarInventarioRegistro(lasHeras.get().getId(),producto.get().getId(), 20L,BigDecimal.valueOf(150), 25);
+
+        //then
+        assertThat(status).isEqualTo(ResponseEntity.notFound().build());
+    }
+
+    @Test
+    void sePuedeModificarHorariosDelNegocio() {
+        //given
+        negocioService.crearNegocio("Buffet Paseo Colon", DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        Optional<Negocio> paseoColon = negocioRepository.findByNombre("Buffet Paseo Colon");
+
+        // when
+        negocioService.modificarHorariosDelNegocio(paseoColon.get().getId(), 14, 30, 21, 0);
+
+        //then
+        paseoColon = negocioRepository.findByNombre("Buffet Paseo Colon");
+        assertThat(paseoColon.get().horarioDeApertura).isEqualTo(LocalTime.of(14, 30, 0, 0));
+        assertThat(paseoColon.get().horarioDeCierre).isEqualTo(LocalTime.of(21, 0, 0, 0));
+    }
+
+    @Test
+    void noSePuedeModificarHorariosDelNegocioCuandoElHorarioDeAperturaEsMayorAlDeCierre() {
+        //given
+        negocioService.crearNegocio("Buffet Paseo Colon", DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        Optional<Negocio> paseoColon = negocioRepository.findByNombre("Buffet Paseo Colon");
+
+        // when
+        ResponseEntity<HttpStatus> status = negocioService.modificarHorariosDelNegocio(paseoColon.get().getId(), 21, 30, 14, 0);
+
+        //then
+        assertThat(status).isEqualTo(ResponseEntity.badRequest().build());
+    }
+
+    @Test
+    void noSePuedeModificarHorariosDeUnNegocioQueNoExiste() {
+        // when
+        ResponseEntity<HttpStatus> status = negocioService.modificarHorariosDelNegocio(1L, 14, 30, 21, 0);
+
+        //then
+        assertThat(status).isEqualTo(ResponseEntity.badRequest().build());
+    }
+
+    @Test
+    void sePuedeModificarDiasDelNegocio() {
+        //given
+        negocioService.crearNegocio("Buffet Paseo Colon", DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        Optional<Negocio> paseoColon = negocioRepository.findByNombre("Buffet Paseo Colon");
+
+        // when
+        negocioService.modificarDiasDeAperturaDelNegocio(paseoColon.get().getId(), DayOfWeek.THURSDAY, DayOfWeek.SATURDAY);
+
+        //then
+        paseoColon = negocioRepository.findByNombre("Buffet Paseo Colon");
+        assertThat(paseoColon.get().diaDeApertura).isEqualTo( DayOfWeek.THURSDAY);
+        assertThat(paseoColon.get().diaDeCierre).isEqualTo( DayOfWeek.SATURDAY);
+    }
+
+    @Test
+    void noSePuedeModificarDiasDeUnNegocioQueNoExiste() {
+        // when
+        ResponseEntity<HttpStatus> status = negocioService.modificarDiasDeAperturaDelNegocio(1L, DayOfWeek.THURSDAY, DayOfWeek.SATURDAY);
+
+        //then
+        assertThat(status).isEqualTo(ResponseEntity.badRequest().build());
     }
 
 }
