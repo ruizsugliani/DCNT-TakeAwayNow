@@ -33,5 +33,5 @@ public class ClienteService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<HttpStatus> agregarProductoAlPedido(Long idPedido, Long idProducto);
+    // public ResponseEntity<HttpStatus> agregarProductoAlPedido(Long idPedido, Long idProducto);
 }

@@ -1,5 +1,6 @@
 package com.dcnt.take_away_now.domain;
 
+import com.dcnt.take_away_now.enums.EstadoDelPedido;
 import com.dcnt.take_away_now.value_object.Dinero;
 import com.dcnt.take_away_now.value_object.converter.DineroAttributeConverter;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -20,9 +21,12 @@ public class Pedido {
     @Column(name="ID_PEDIDO")
     private Long id;
 
+    @Column(name="ESTADO")
+    public EstadoDelPedido estadoDelPedido = EstadoDelPedido.AGUARDANDO_CONFIRMACION_DEL_CLIENTE;
+
     @Column(name="PRECIO_TOTAL")
     @Convert(converter = DineroAttributeConverter.class)
-    public Dinero precioTotal;
+    public Dinero precioTotal = new Dinero(0);
 
     @Column(name="FECHA_Y_HORA_ENTREGA")
     public LocalDateTime fechaYHoraDeEntrega;
