@@ -21,24 +21,33 @@ public class Negocio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="ID_NEGOCIO")
     private Long id;
+
     @Column(name="NOMBRE")
     public String nombre;
+
     @Column(name="SALDO")
     @Convert(converter = DineroAttributeConverter.class)
     public Dinero saldo;
+
     @Column(name="DIA_APERTURA")
     public DayOfWeek diaDeApertura;
+
     @Column(name="DIA_CIERRE")
     public DayOfWeek diaDeCierre;
+
     @Column(name="HORARIO_APERTURA")
     public LocalTime horarioDeApertura;
+
     @Column(name="HORARIO_CIERRE")
     public LocalTime horarioDeCierre;
+
     @JsonBackReference
     @OneToMany(targetEntity = InventarioRegistro.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "negocio")
     private List<InventarioRegistro> inventarioRegistros;
-    //@OneToMany(targetEntity = Pedido.class, fetch = FetchType.LAZY, mappedBy = "negocio")
-    //private List<Pedido> pedidos;
+
+    @JsonBackReference
+    @OneToMany(targetEntity = Pedido.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "negocio")
+    private List<Pedido> pedidos;
 
     /**
      *
