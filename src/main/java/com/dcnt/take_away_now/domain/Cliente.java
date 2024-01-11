@@ -1,7 +1,9 @@
 package com.dcnt.take_away_now.domain;
 
 import com.dcnt.take_away_now.value_object.Dinero;
+import com.dcnt.take_away_now.value_object.PuntosDeConfianza;
 import com.dcnt.take_away_now.value_object.converter.DineroAttributeConverter;
+import com.dcnt.take_away_now.value_object.converter.PuntosDeConfianzaAttributeConverter;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -28,6 +30,10 @@ public class Cliente {
     @Column(name="SALDO")
     @Convert(converter = DineroAttributeConverter.class)
     public Dinero saldo = new Dinero(0);
+
+    @Column(name="PDC")
+    @Convert(converter = PuntosDeConfianzaAttributeConverter.class)
+    private PuntosDeConfianza puntosDeConfianza;
 
     @JsonBackReference
     @OneToMany(targetEntity = Pedido.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "cliente")

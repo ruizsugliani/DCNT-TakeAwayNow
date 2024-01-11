@@ -43,4 +43,8 @@ public class Pedido {
     @JoinColumn(name = "ID_NEGOCIO")
     private Negocio negocio;
 
+    public Pedido(Negocio negocio, Cliente cliente) {
+        this.negocio = negocio;
+        this.cliente = cliente;
+    }
 }

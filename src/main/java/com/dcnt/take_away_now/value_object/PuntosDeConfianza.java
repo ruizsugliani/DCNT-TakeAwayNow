@@ -95,6 +95,13 @@ public class PuntosDeConfianza implements Comparable<PuntosDeConfianza> {
         return new PuntosDeConfianza(this.cantidad * cantidad);
     }
 
+    public PuntosDeConfianza multiply(Integer cantidad) {
+        if (cantidad < 0) {
+            throw new IllegalStateException("No se pueden multiplicar puntos de confianza por números menores a cero.");
+        }
+        return new PuntosDeConfianza(this.cantidad * cantidad);
+    }
+
     /*
     PuntosDeConfianza eliminarPuntosPorCompra(Compra compra, int multiplicador = 1) {
         this - this.calcularPuntosPorCompra(compra) * multiplicador

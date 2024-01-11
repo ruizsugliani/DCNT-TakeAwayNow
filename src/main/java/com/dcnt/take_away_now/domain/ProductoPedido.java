@@ -26,4 +26,10 @@ public class ProductoPedido {
     @ManyToOne(targetEntity = Producto.class)
     @JoinColumn(name = "ID_PRODUCTO")
     private Producto producto;
+
+    public ProductoPedido(Integer cantidad, Pedido pedido, Producto producto) {
+        this.cantidad = cantidad;
+        this.pedido = pedido;
+        this.producto = producto;
+    }
 }

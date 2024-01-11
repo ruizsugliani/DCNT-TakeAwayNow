@@ -67,4 +67,9 @@ public class Dinero implements Comparable<Dinero> {
         return new Dinero(resultado);
     }
 
+    public Dinero multiply(Dinero otro) {
+        BigDecimal resultado = this.getMonto().multiply(otro.getMonto());
+        return new Dinero(resultado);
+    }
+
 }
