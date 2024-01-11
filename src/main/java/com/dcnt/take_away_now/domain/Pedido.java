@@ -22,7 +22,7 @@ public class Pedido {
     private Long id;
 
     @Column(name="ESTADO")
-    public EstadoDelPedido estadoDelPedido = EstadoDelPedido.AGUARDANDO_CONFIRMACION_DEL_CLIENTE;
+    public EstadoDelPedido estado = EstadoDelPedido.AGUARDANDO_PREPARACION;
 
     @Column(name="PRECIO_TOTAL")
     @Convert(converter = DineroAttributeConverter.class)

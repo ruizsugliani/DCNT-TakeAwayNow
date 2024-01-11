@@ -2,11 +2,14 @@ package com.dcnt.take_away_now.service;
 
 import com.dcnt.take_away_now.domain.InventarioRegistro;
 import com.dcnt.take_away_now.domain.Negocio;
+import com.dcnt.take_away_now.domain.Pedido;
 import com.dcnt.take_away_now.domain.Producto;
 import com.dcnt.take_away_now.dto.InventarioRegistroDto;
 import com.dcnt.take_away_now.dto.ProductoDto;
+import com.dcnt.take_away_now.enums.EstadoDelPedido;
 import com.dcnt.take_away_now.repository.InventarioRegistroRepository;
 import com.dcnt.take_away_now.repository.NegocioRepository;
+import com.dcnt.take_away_now.repository.PedidoRepository;
 import com.dcnt.take_away_now.repository.ProductoRepository;
 import com.dcnt.take_away_now.value_object.Dinero;
 import com.dcnt.take_away_now.value_object.PuntosDeConfianza;
@@ -21,12 +24,14 @@ import java.time.LocalTime;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+@SuppressWarnings("OptionalGetWithoutIsPresent")
 @AllArgsConstructor
 @Service
 public class NegocioService {
     private final NegocioRepository negocioRepository;
     private final InventarioRegistroRepository inventarioRegistroRepository;
     private final ProductoRepository productoRepository;
+    private final PedidoRepository pedidoRepository;
 
     public ResponseEntity<HttpStatus> crearNegocio(
             String nombre,
@@ -83,9 +88,7 @@ public class NegocioService {
         nuevoInventarioRegistro.setProducto(nuevoProducto);
         nuevoInventarioRegistro.setNegocio(negocioExistente);
         nuevoProducto.setInventarioRegistro(nuevoInventarioRegistro);
-        //negocioExistente.registrarProductoEnInventario(nuevoInventarioRegistro);
 
-        //negocioRepository.save(negocioExistente);
         productoRepository.save(nuevoProducto);
         inventarioRegistroRepository.save(nuevoInventarioRegistro);
 
@@ -201,4 +204,71 @@ public class NegocioService {
 
         return ResponseEntity.accepted().build();
     }
+
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
+    public ResponseEntity<HttpStatus> marcarComienzoDePreparacion(Long idPedido) {
+        if (!pedidoRepository.existsPedidoById(idPedido)) {
+            throw new NoSuchElementException("No existe el pedido al cual usted solicitó cambiar su estado.");
+        }
+        Pedido pedido = pedidoRepository.findById(idPedido).get();
+        if (pedido.estado != EstadoDelPedido.AGUARDANDO_PREPARACION) {
+            throw new IllegalStateException("No se puede comenzar a preparar dicho pedido ya que el mismo no se encuentra aguardando preparación.");
+        }
+        pedido.setEstado(EstadoDelPedido.EN_PREPARACION);
+        pedidoRepository.save(pedido);
+        return ResponseEntity.accepted().build();
+    }
+
+    public ResponseEntity<HttpStatus> marcarPedidoListoParaRetirar(Long idPedido) {
+        if (!pedidoRepository.existsPedidoById(idPedido)) {
+            throw new NoSuchElementException("No existe el pedido al cual usted solicitó cambiar su estado.");
+        }
+        Pedido pedido = pedidoRepository.findById(idPedido).get();
+        if (pedido.estado != EstadoDelPedido.EN_PREPARACION) {
+            throw new IllegalStateException("No se puede marcar dicho pedido como lista para retirar ya que el mismo no se encuentra en preparación.");
+        }
+        pedido.setEstado(EstadoDelPedido.LISTO_PARA_RETIRAR);
+        pedidoRepository.save(pedido);
+        return ResponseEntity.accepted().build();
+    }
+
+    public ResponseEntity<HttpStatus> marcarPedidoRetirado(Long idPedido) {
+        if (!pedidoRepository.existsPedidoById(idPedido)) {
+            throw new NoSuchElementException("No existe el pedido al cual usted solicitó cambiar su estado.");
+        }
+        Pedido pedido = pedidoRepository.findById(idPedido).get();
+        if (pedido.estado != EstadoDelPedido.LISTO_PARA_RETIRAR) {
+            throw new IllegalStateException("No se puede marcar dicho pedido como retirado ya que el mismo no se encuentra listo para retirar.");
+        }
+        pedido.setEstado(EstadoDelPedido.RETIRADO);
+        pedidoRepository.save(pedido);
+        return ResponseEntity.accepted().build();
+    }
+
+    public ResponseEntity<HttpStatus> marcarPedidoCancelado(Long idPedido) {
+        if (!pedidoRepository.existsPedidoById(idPedido)) {
+            throw new NoSuchElementException("No existe el pedido al cual usted solicitó cambiar su estado.");
+        }
+        Pedido pedido = pedidoRepository.findById(idPedido).get();
+        if (pedido.estado != EstadoDelPedido.RETIRADO) {
+            throw new IllegalStateException("No se puede marcar dicho pedido como cancelado ya que el mismo no se encontraba retirado.");
+        }
+        pedido.setEstado(EstadoDelPedido.CANCELADO);
+        pedidoRepository.save(pedido);
+        return ResponseEntity.accepted().build();
+    }
+
+    public ResponseEntity<HttpStatus> marcarPedidoDevuelto(Long idPedido) {
+        if (!pedidoRepository.existsPedidoById(idPedido)) {
+            throw new NoSuchElementException("No existe el pedido al cual usted solicitó cambiar su estado.");
+        }
+        Pedido pedido = pedidoRepository.findById(idPedido).get();
+        if (pedido.estado != EstadoDelPedido.RETIRADO) {
+            throw new IllegalStateException("No se puede marcar dicho pedido como devuelto ya que el mismo no se encontraba retirado.");
+        }
+        pedido.setEstado(EstadoDelPedido.DEVUELTO);
+        pedidoRepository.save(pedido);
+        return ResponseEntity.accepted().build();
+    }
+
 }

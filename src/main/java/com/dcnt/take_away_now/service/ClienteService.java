@@ -1,6 +1,7 @@
 package com.dcnt.take_away_now.service;
 
 import com.dcnt.take_away_now.domain.Cliente;
+import com.dcnt.take_away_now.domain.Pedido;
 import com.dcnt.take_away_now.repository.ClienteRepository;
 import com.dcnt.take_away_now.repository.PedidoRepository;
 import com.dcnt.take_away_now.repository.ProductoPedidoRepository;
@@ -33,5 +34,7 @@ public class ClienteService {
         return ResponseEntity.ok().build();
     }
 
-    // public ResponseEntity<HttpStatus> agregarProductoAlPedido(Long idPedido, Long idProducto);
+    public void eliminarCliente(Long idCliente) {
+        clienteRepository.deleteById(idCliente);
+    }
 }
