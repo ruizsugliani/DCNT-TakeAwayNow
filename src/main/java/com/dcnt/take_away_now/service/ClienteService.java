@@ -27,7 +27,7 @@ public class ClienteService {
     public ResponseEntity<HttpStatus> crearCliente(String usuario) {
         Optional<Cliente> optionalCliente = clienteRepository.findByUsuario(usuario);
         if (optionalCliente.isPresent()) {
-            return ResponseEntity.badRequest().build();
+            throw new RuntimeException("Ya existe un usuario con el nombre ingresado.");
         }
 
         this.clienteRepository.save(new Cliente(usuario));

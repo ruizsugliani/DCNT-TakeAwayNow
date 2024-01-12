@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -29,18 +28,6 @@ public class PedidoService {
         return pedidoRepository.findAll();
     }
 
-    public boolean esUnClienteExistente(Long idCliente) {
-        return clienteRepository.existsById(idCliente);
-    }
-
-    public boolean esUnNegocioExistente(Long idNegocio) {
-        return negocioRepository.existsById(idNegocio);
-    }
-
-    public boolean esUnProductoExistente(Long idProducto) {
-        return productoRepository.existsById(idProducto);
-    }
-
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     public boolean esUnProductoDeEseNegocio(Long idNegocio, Long idProducto) {
         Negocio negocio = negocioRepository.findById(idNegocio).get();
@@ -52,7 +39,7 @@ public class PedidoService {
     public boolean sePuedeConfirmarUnPedidoParaEstosProductos(Map<Long, Integer> productos, Long idNegocio) {
         for (Map.Entry<Long, Integer> entry : productos.entrySet()) {
             if (!esUnProductoDeEseNegocio(idNegocio, entry.getKey())) {
-                return false;
+                throw new RuntimeException("Ha ocurrido un error ya que el producto " + productoRepository.findById(entry.getKey()).get().getNombre() + " no está disponible para este negocio.");
             }
 
             // Levantamos la cantidad pedida por el cliente y corroboramos que exista el stock necesario.
@@ -62,7 +49,7 @@ public class PedidoService {
             InventarioRegistro inventarioRegistro = inventarioRegistroRepository.findByNegocioAndProducto(negocio, producto).get();
 
             if (cantidadPedida > inventarioRegistro.getStock()) {
-                return false;
+                throw new RuntimeException("La cantidad solicitada para el producto "+ producto.getNombre() + " es mayor al stock disponible.");
             }
 
         }
@@ -70,7 +57,6 @@ public class PedidoService {
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
-    @Transactional
     public ResponseEntity<HttpStatus> confirmarPedido(InfoPedidoDto dto) {
         // Dado que ya hemos corroborado todos los datos, procedemos a confirmar el pedido.
         Dinero precioTotalDelPedido = new Dinero(0);
@@ -84,8 +70,8 @@ public class PedidoService {
         for (Map.Entry<Long, Integer> entry : dto.getProductos().entrySet()) {
             Integer cantidadPedida = entry.getValue();
             Producto producto = productoRepository.findById(entry.getKey()).get();
-            InventarioRegistro inventarioRegistro = inventarioRegistroRepository.findByNegocioAndProducto(negocio, producto).get();
-            PuntosDeConfianza pdcProducto = inventarioRegistro.getRecompensaPuntosDeConfianza();
+
+            InventarioRegistro inventarioRegistro = inventarioRegistroRepository.findByNegocioAndProducto(negocio, producto).orElseThrow( () -> new RuntimeException("Ocurrió un error con el producto "+ producto.getNombre() +" al confirmar el pedido.") );
 
             inventarioRegistro.setStock(inventarioRegistro.getStock() - cantidadPedida);
 
@@ -117,14 +103,10 @@ public class PedidoService {
         return  ResponseEntity.ok().build();
     }
 
+    @Transactional
     public ResponseEntity<HttpStatus> verificarPedido(InfoPedidoDto dto) {
-        if (!esUnClienteExistente(dto.getIdCliente())) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        if (!esUnNegocioExistente(dto.getIdNegocio())) {
-            return ResponseEntity.badRequest().build();
-        }
+        clienteRepository.findById(dto.getIdCliente()).orElseThrow( () -> new RuntimeException("Cliente no encontrado") );
+        negocioRepository.findById(dto.getIdNegocio()).orElseThrow( () -> new RuntimeException("Negocio no encontrado") );
 
         if (!sePuedeConfirmarUnPedidoParaEstosProductos(dto.getProductos(), dto.getIdNegocio())) {
             return ResponseEntity.badRequest().build();
