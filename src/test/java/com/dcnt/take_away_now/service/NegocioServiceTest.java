@@ -7,6 +7,7 @@ import com.dcnt.take_away_now.dto.InventarioRegistroDto;
 import com.dcnt.take_away_now.dto.ProductoDto;
 import com.dcnt.take_away_now.repository.InventarioRegistroRepository;
 import com.dcnt.take_away_now.repository.NegocioRepository;
+import com.dcnt.take_away_now.repository.PedidoRepository;
 import com.dcnt.take_away_now.repository.ProductoRepository;
 import com.dcnt.take_away_now.value_object.Dinero;
 import com.dcnt.take_away_now.value_object.PuntosDeConfianza;
@@ -36,6 +37,8 @@ class NegocioServiceTest {
     private InventarioRegistroRepository inventarioRegistroRepository;
     @Autowired
     private ProductoRepository productoRepository;
+    @Autowired
+    private PedidoRepository pedidoRepository;
     private NegocioService negocioService;
     private DayOfWeek DiaDeApertura;
     private DayOfWeek DiaDeCierre;
@@ -47,7 +50,7 @@ class NegocioServiceTest {
     void setUp() {
         DiaDeApertura = DayOfWeek.MONDAY;
         DiaDeCierre = DayOfWeek.FRIDAY;
-        negocioService = new NegocioService(negocioRepository, inventarioRegistroRepository, productoRepository);
+        negocioService = new NegocioService(negocioRepository, inventarioRegistroRepository, productoRepository,pedidoRepository);
         HoraApertura = 9;
         MinutoApertura = 0;
         HoraCierre = 18;
