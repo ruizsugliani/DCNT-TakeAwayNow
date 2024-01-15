@@ -1,14 +1,9 @@
 package com.dcnt.take_away_now.service;
 
-import com.dcnt.take_away_now.domain.InventarioRegistro;
-import com.dcnt.take_away_now.domain.Negocio;
-import com.dcnt.take_away_now.domain.Producto;
+import com.dcnt.take_away_now.domain.*;
 import com.dcnt.take_away_now.dto.InventarioRegistroDto;
 import com.dcnt.take_away_now.dto.ProductoDto;
-import com.dcnt.take_away_now.repository.InventarioRegistroRepository;
-import com.dcnt.take_away_now.repository.NegocioRepository;
-import com.dcnt.take_away_now.repository.PedidoRepository;
-import com.dcnt.take_away_now.repository.ProductoRepository;
+import com.dcnt.take_away_now.repository.*;
 import com.dcnt.take_away_now.value_object.Dinero;
 import com.dcnt.take_away_now.value_object.PuntosDeConfianza;
 import org.apache.hc.core5.http.HttpStatus;
@@ -39,6 +34,9 @@ class NegocioServiceTest {
     private ProductoRepository productoRepository;
     @Autowired
     private PedidoRepository pedidoRepository;
+    @Autowired
+    private ClienteRepository clienteRepository;
+
     private NegocioService negocioService;
     private DayOfWeek DiaDeApertura;
     private DayOfWeek DiaDeCierre;
@@ -46,6 +44,7 @@ class NegocioServiceTest {
     private int MinutoApertura;
     private int HoraCierre;
     private int MinutoCierre;
+    private String nombrePaseoColon;
     @BeforeEach
     void setUp() {
         DiaDeApertura = DayOfWeek.MONDAY;
@@ -55,13 +54,14 @@ class NegocioServiceTest {
         MinutoApertura = 0;
         HoraCierre = 18;
         MinutoCierre = 0;
+        nombrePaseoColon = "Buffet Paseo Colon";
     }
 
     @Test
     void sePuedeCrearNegocioNuevo() {
         //when
-        negocioService.crearNegocio("Buffet Paseo Colon", DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
-        Optional<Negocio> negocio = negocioRepository.findByNombre("Buffet Paseo Colon");
+        negocioService.crearNegocio(nombrePaseoColon, DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        Optional<Negocio> negocio = negocioRepository.findByNombre(nombrePaseoColon);
         //then
         assertThat(negocio.isPresent()).isTrue();
     }
@@ -69,9 +69,9 @@ class NegocioServiceTest {
     @Test
     void noSePuedeCrearNegocioExistente() {
         //given
-        negocioService.crearNegocio("Buffet Paseo Colon", DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        negocioService.crearNegocio(nombrePaseoColon, DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
         //when
-         ResponseEntity<HttpStatus> status = negocioService.crearNegocio("Buffet Paseo Colon", DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+         ResponseEntity<HttpStatus> status = negocioService.crearNegocio(nombrePaseoColon, DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
         //then
         assertThat(status).isEqualTo(ResponseEntity.badRequest().build());
     }
@@ -79,21 +79,29 @@ class NegocioServiceTest {
     @Test
     void seObtienenNegociosExistentes() {
         //given
-        negocioService.crearNegocio("Buffet Paseo Colon", DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        negocioService.crearNegocio(nombrePaseoColon, DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
         negocioService.crearNegocio("Buffet Las Heras", DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
         negocioService.crearNegocio("Buffet Ciudad Universitaria", DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
         //when
         Collection<Negocio> negocios = negocioService.obtenerNegocios();
         //then
         assertThat(negocios.size()).isEqualTo(3);
+        assertThat(existeNegocio(negocios, nombrePaseoColon)).isTrue();
+        assertThat(existeNegocio(negocios, "Buffet Las Heras")).isTrue();
+        assertThat(existeNegocio(negocios, "Buffet Ciudad Universitaria")).isTrue();
+    }
+
+    private boolean existeNegocio(Collection<Negocio> negocios, String nombreNegocio) {
+        return negocios.stream()
+                .anyMatch(cliente -> cliente.getNombre().equals(nombreNegocio));
     }
 
     @Test
     void sePuedeCrearProductoNuevoEnNegocioExistente() {
         //given
-        negocioService.crearNegocio("Buffet Paseo Colon", DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        negocioService.crearNegocio(nombrePaseoColon, DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
         InventarioRegistroDto inventarioRegistroDto = new InventarioRegistroDto(10L, new Dinero(100), new PuntosDeConfianza(20));
-        Optional<Negocio> negocio = negocioRepository.findByNombre("Buffet Paseo Colon");
+        Optional<Negocio> negocio = negocioRepository.findByNombre(nombrePaseoColon);
         //when
         negocioService.crearProducto(negocio.get().getId(), "Pancho",inventarioRegistroDto);
         //then
@@ -105,9 +113,9 @@ class NegocioServiceTest {
     @Test
     void noSePuedeCrearProductoYaExistenteEnNegocioExistente() {
         //given
-        negocioService.crearNegocio("Buffet Paseo Colon", DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        negocioService.crearNegocio(nombrePaseoColon, DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
         InventarioRegistroDto inventarioRegistroDto = new InventarioRegistroDto(10L, new Dinero(100), new PuntosDeConfianza(20));
-        Optional<Negocio> negocio = negocioRepository.findByNombre("Buffet Paseo Colon");
+        Optional<Negocio> negocio = negocioRepository.findByNombre(nombrePaseoColon);
         negocioService.crearProducto(negocio.get().getId(), "Pancho",inventarioRegistroDto);
         //when
         ResponseEntity<HttpStatus> status= negocioService.crearProducto(negocio.get().getId(), "Pancho",inventarioRegistroDto);
@@ -126,9 +134,9 @@ class NegocioServiceTest {
     @Test
     void eliminarProducto() {
         //given
-        negocioService.crearNegocio("Buffet Paseo Colon", DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        negocioService.crearNegocio(nombrePaseoColon, DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
         InventarioRegistroDto inventarioRegistroDto = new InventarioRegistroDto(10L, new Dinero(100), new PuntosDeConfianza(20));
-        Optional<Negocio> negocio = negocioRepository.findByNombre("Buffet Paseo Colon");
+        Optional<Negocio> negocio = negocioRepository.findByNombre(nombrePaseoColon);
         negocioService.crearProducto(negocio.get().getId(), "Pancho",inventarioRegistroDto);
         Optional<Producto> producto = productoRepository.findByNombre("Pancho");
         //when
@@ -144,9 +152,9 @@ class NegocioServiceTest {
     @Test
     void obtenerProductos() {
         //given
-        negocioService.crearNegocio("Buffet Paseo Colon", DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        negocioService.crearNegocio(nombrePaseoColon, DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
         InventarioRegistroDto inventarioRegistroDto = new InventarioRegistroDto(10L, new Dinero(100), new PuntosDeConfianza(20));
-        Optional<Negocio> negocio = negocioRepository.findByNombre("Buffet Paseo Colon");
+        Optional<Negocio> negocio = negocioRepository.findByNombre(nombrePaseoColon);
         negocioService.crearProducto(negocio.get().getId(), "Pancho",inventarioRegistroDto);
         negocioService.crearProducto(negocio.get().getId(), "Coca Cola",inventarioRegistroDto);
         negocioService.crearProducto(negocio.get().getId(), "Alfajor",inventarioRegistroDto);
@@ -154,7 +162,16 @@ class NegocioServiceTest {
         Collection<ProductoDto> productos = negocioService.obtenerProductos(negocio.get().getId());
         //then
         assertThat(productos.size()).isEqualTo(3);
+        assertThat(existeProducto(productos, "Pancho")).isTrue();
+        assertThat(existeProducto(productos, "Coca Cola")).isTrue();
+        assertThat(existeProducto(productos, "Alfajor")).isTrue();
     }
+
+    private boolean existeProducto(Collection<ProductoDto> productos, String nombreProducto) {
+        return productos.stream()
+                .anyMatch(cliente -> cliente.getNombre().equals(nombreProducto));
+    }
+
     @Test
     void noSePuedeobtenerProductosDeUnNegocioQueNoExiste() {
         // when: "Se intenta obtener productos de un negocio que no existe"
@@ -171,9 +188,9 @@ class NegocioServiceTest {
     @Test
     void sePuedeModificarInventarioRegistro() {
         //given
-        negocioService.crearNegocio("Buffet Paseo Colon", DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        negocioService.crearNegocio(nombrePaseoColon, DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
         InventarioRegistroDto inventarioRegistroDto = new InventarioRegistroDto(10L, new Dinero(100), new PuntosDeConfianza(20));
-        Optional<Negocio> negocio = negocioRepository.findByNombre("Buffet Paseo Colon");
+        Optional<Negocio> negocio = negocioRepository.findByNombre(nombrePaseoColon);
         negocioService.crearProducto(negocio.get().getId(), "Pancho",inventarioRegistroDto);
         Optional<Producto> producto = productoRepository.findByNombre("Pancho");
         //when
@@ -200,9 +217,9 @@ class NegocioServiceTest {
     @Test
     void noSePuedeModificarInventarioRegistroDeUnProductoQueNoExiste() {
         //given
-        negocioService.crearNegocio("Buffet Paseo Colon", DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        negocioService.crearNegocio(nombrePaseoColon, DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
         InventarioRegistroDto inventarioRegistroDto = new InventarioRegistroDto(10L, new Dinero(100), new PuntosDeConfianza(20));
-        Optional<Negocio> negocio = negocioRepository.findByNombre("Buffet Paseo Colon");
+        Optional<Negocio> negocio = negocioRepository.findByNombre(nombrePaseoColon);
         // when: "Se intenta modificar un inventarioRegistro de un producto que no existe"
         assertThatThrownBy(
                 () -> {
@@ -217,10 +234,10 @@ class NegocioServiceTest {
     @Test
     void noSePuedeModificarInventarioRegistroDeUnProductoQueNoTieneRelacionConUnNegocio() {
         //given
-        negocioService.crearNegocio("Buffet Paseo Colon", DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        negocioService.crearNegocio(nombrePaseoColon, DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
         negocioService.crearNegocio("Buffet Las Heras", DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
         InventarioRegistroDto inventarioRegistroDto = new InventarioRegistroDto(10L, new Dinero(100), new PuntosDeConfianza(20));
-        Optional<Negocio> paseoColon = negocioRepository.findByNombre("Buffet Las Heras");
+        Optional<Negocio> paseoColon = negocioRepository.findByNombre(nombrePaseoColon);
         negocioService.crearProducto(paseoColon.get().getId(), "Pancho",inventarioRegistroDto);
         Optional<Producto> producto = productoRepository.findByNombre("Pancho");
         Optional<Negocio> lasHeras = negocioRepository.findByNombre("Buffet Las Heras");
@@ -235,14 +252,14 @@ class NegocioServiceTest {
     @Test
     void sePuedeModificarHorariosDelNegocio() {
         //given
-        negocioService.crearNegocio("Buffet Paseo Colon", DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
-        Optional<Negocio> paseoColon = negocioRepository.findByNombre("Buffet Paseo Colon");
+        negocioService.crearNegocio(nombrePaseoColon, DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        Optional<Negocio> paseoColon = negocioRepository.findByNombre(nombrePaseoColon);
 
         // when
         negocioService.modificarHorariosDelNegocio(paseoColon.get().getId(), 14, 30, 21, 0);
 
         //then
-        paseoColon = negocioRepository.findByNombre("Buffet Paseo Colon");
+        paseoColon = negocioRepository.findByNombre(nombrePaseoColon);
         assertThat(paseoColon.get().horarioDeApertura).isEqualTo(LocalTime.of(14, 30, 0, 0));
         assertThat(paseoColon.get().horarioDeCierre).isEqualTo(LocalTime.of(21, 0, 0, 0));
     }
@@ -250,8 +267,8 @@ class NegocioServiceTest {
     @Test
     void noSePuedeModificarHorariosDelNegocioCuandoElHorarioDeAperturaEsMayorAlDeCierre() {
         //given
-        negocioService.crearNegocio("Buffet Paseo Colon", DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
-        Optional<Negocio> paseoColon = negocioRepository.findByNombre("Buffet Paseo Colon");
+        negocioService.crearNegocio(nombrePaseoColon, DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        Optional<Negocio> paseoColon = negocioRepository.findByNombre(nombrePaseoColon);
 
         // when
         ResponseEntity<HttpStatus> status = negocioService.modificarHorariosDelNegocio(paseoColon.get().getId(), 21, 30, 14, 0);
@@ -272,14 +289,14 @@ class NegocioServiceTest {
     @Test
     void sePuedeModificarDiasDelNegocio() {
         //given
-        negocioService.crearNegocio("Buffet Paseo Colon", DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
-        Optional<Negocio> paseoColon = negocioRepository.findByNombre("Buffet Paseo Colon");
+        negocioService.crearNegocio(nombrePaseoColon, DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        Optional<Negocio> paseoColon = negocioRepository.findByNombre(nombrePaseoColon);
 
         // when
         negocioService.modificarDiasDeAperturaDelNegocio(paseoColon.get().getId(), DayOfWeek.THURSDAY, DayOfWeek.SATURDAY);
 
         //then
-        paseoColon = negocioRepository.findByNombre("Buffet Paseo Colon");
+        paseoColon = negocioRepository.findByNombre(nombrePaseoColon);
         assertThat(paseoColon.get().diaDeApertura).isEqualTo( DayOfWeek.THURSDAY);
         assertThat(paseoColon.get().diaDeCierre).isEqualTo( DayOfWeek.SATURDAY);
     }
@@ -293,4 +310,267 @@ class NegocioServiceTest {
         assertThat(status).isEqualTo(ResponseEntity.badRequest().build());
     }
 
+    @Test
+    void sePuedeMarcarComienzoDePreparacionAUnPedidoQueEstaAguardandoPreparacion() {
+        //given
+        negocioService.crearNegocio(nombrePaseoColon, DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        Optional<Negocio> negocio = negocioRepository.findByNombre(nombrePaseoColon);
+        Cliente cliente = new Cliente("Messi");
+        clienteRepository.save(cliente);
+        Pedido pedido1 = new Pedido(negocio.get(), cliente);
+        pedidoRepository.save(pedido1);
+
+        //when
+        ResponseEntity<HttpStatus> status = negocioService.marcarComienzoDePreparacion(pedido1.getId());
+
+        //then
+        assertThat(status).isEqualTo(ResponseEntity.accepted().build());
+    }
+
+    @Test
+    void noSePuedeMarcarComienzoDePreparacionAUnPedidoQueNoExiste() {
+        //when
+        assertThatThrownBy(
+                () -> {
+                    negocioService.marcarComienzoDePreparacion(1L);
+                }
+        )
+        // then: "se lanza error"
+        .isInstanceOf(NoSuchElementException.class)
+        .hasMessageContaining("No existe el pedido al cual usted solicitó cambiar su estado.");
+    }
+
+    @Test
+    void noSePuedeMarcarComienzoDePreparacionAUnPedidoQueNoEstaEnAguardandoPreparacion() {
+        //given
+        negocioService.crearNegocio(nombrePaseoColon, DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        Optional<Negocio> negocio = negocioRepository.findByNombre(nombrePaseoColon);
+        Cliente cliente = new Cliente("Messi");
+        clienteRepository.save(cliente);
+        Pedido pedido1 = new Pedido(negocio.get(), cliente);
+        pedidoRepository.save(pedido1);
+        negocioService.marcarComienzoDePreparacion(pedido1.getId());
+
+        //when
+        assertThatThrownBy(
+                () -> {
+                    negocioService.marcarComienzoDePreparacion(pedido1.getId());
+                }
+        )
+        // then: "se lanza error"
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessageContaining("No se puede comenzar a preparar dicho pedido ya que el mismo no se encuentra aguardando preparación.");
+    }
+
+    @Test
+    void sePuedeMarcarListoParaRetirarAUnPedidoQueEstaEnPreparacion() {
+        //given
+        negocioService.crearNegocio(nombrePaseoColon, DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        Optional<Negocio> negocio = negocioRepository.findByNombre(nombrePaseoColon);
+        Cliente cliente = new Cliente("Messi");
+        clienteRepository.save(cliente);
+        Pedido pedido1 = new Pedido(negocio.get(), cliente);
+        pedidoRepository.save(pedido1);
+        negocioService.marcarComienzoDePreparacion(pedido1.getId());
+
+        //when
+        ResponseEntity<HttpStatus> status = negocioService.marcarPedidoListoParaRetirar(pedido1.getId());
+
+        //then
+        assertThat(status).isEqualTo(ResponseEntity.accepted().build());
+    }
+    @Test
+    void noSePuedeMarcarListoParaRetirarAUnPedidoQueNoExiste() {
+        //when
+        assertThatThrownBy(
+                () -> {
+                    negocioService.marcarPedidoListoParaRetirar(1L);
+                }
+        )
+        // then: "se lanza error"
+        .isInstanceOf(NoSuchElementException.class)
+        .hasMessageContaining("No existe el pedido al cual usted solicitó cambiar su estado.");
+    }
+
+    @Test
+    void noSePuedeMarcarListoParaRetirarAUnPedidoQueNoEstaEnPreparacion() {
+        //given
+        negocioService.crearNegocio(nombrePaseoColon, DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        Optional<Negocio> negocio = negocioRepository.findByNombre(nombrePaseoColon);
+        Cliente cliente = new Cliente("Messi");
+        clienteRepository.save(cliente);
+        Pedido pedido1 = new Pedido(negocio.get(), cliente);
+        pedidoRepository.save(pedido1);
+
+        //when
+        assertThatThrownBy(
+                () -> {
+                    negocioService.marcarPedidoListoParaRetirar(pedido1.getId());
+                }
+        )
+        // then: "se lanza error"
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessageContaining("No se puede marcar dicho pedido como lista para retirar ya que el mismo no se encuentra en preparación.");
+    }
+
+    @Test
+    void sePuedeMarcarPedidoRetiradoAUnPedidoQueEstaListoParaRetirar() {
+        //given
+        negocioService.crearNegocio(nombrePaseoColon, DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        Optional<Negocio> negocio = negocioRepository.findByNombre(nombrePaseoColon);
+        Cliente cliente = new Cliente("Messi");
+        clienteRepository.save(cliente);
+        Pedido pedido1 = new Pedido(negocio.get(), cliente);
+        pedidoRepository.save(pedido1);
+        negocioService.marcarComienzoDePreparacion(pedido1.getId());
+        negocioService.marcarPedidoListoParaRetirar(pedido1.getId());
+
+        //when
+        ResponseEntity<HttpStatus> status = negocioService.marcarPedidoRetirado(pedido1.getId());
+
+        //then
+        assertThat(status).isEqualTo(ResponseEntity.accepted().build());
+    }
+
+    @Test
+    void noSePuedeMarcarPedidoRetiradoAUnPedidoQueNoExiste() {
+        //when
+        assertThatThrownBy(
+                () -> {
+                    negocioService.marcarPedidoRetirado(1L);
+                }
+        )
+        // then: "se lanza error"
+        .isInstanceOf(NoSuchElementException.class)
+        .hasMessageContaining("No existe el pedido al cual usted solicitó cambiar su estado.");
+    }
+
+    @Test
+    void noSePuedeMarcarPedidoRetiradoAUnPedidoQueNoEstaListoParaRetirar() {
+        //given
+        negocioService.crearNegocio(nombrePaseoColon, DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        Optional<Negocio> negocio = negocioRepository.findByNombre(nombrePaseoColon);
+        Cliente cliente = new Cliente("Messi");
+        clienteRepository.save(cliente);
+        Pedido pedido1 = new Pedido(negocio.get(), cliente);
+        pedidoRepository.save(pedido1);
+
+        //when
+        assertThatThrownBy(
+                () -> {
+                    negocioService.marcarPedidoRetirado(pedido1.getId());
+                }
+        )
+        // then: "se lanza error"
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessageContaining("No se puede marcar dicho pedido como retirado ya que el mismo no se encuentra listo para retirar.");
+    }
+
+    @Test
+    void sePuedeMarcarPedidoCanceladoAUnPedidoQueEstaRetirado() {
+        //given
+        negocioService.crearNegocio(nombrePaseoColon, DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        Optional<Negocio> negocio = negocioRepository.findByNombre(nombrePaseoColon);
+        Cliente cliente = new Cliente("Messi");
+        clienteRepository.save(cliente);
+        Pedido pedido1 = new Pedido(negocio.get(), cliente);
+        pedidoRepository.save(pedido1);
+        negocioService.marcarComienzoDePreparacion(pedido1.getId());
+        negocioService.marcarPedidoListoParaRetirar(pedido1.getId());
+        negocioService.marcarPedidoRetirado(pedido1.getId());
+
+        //when
+        ResponseEntity<HttpStatus> status = negocioService.marcarPedidoCancelado(pedido1.getId());
+
+        //then
+        assertThat(status).isEqualTo(ResponseEntity.accepted().build());
+    }
+
+    @Test
+    void noSePuedeMarcarPedidoCanceladoAUnPedidoQueNoExiste() {
+        //when
+        assertThatThrownBy(
+                () -> {
+                    negocioService.marcarPedidoCancelado(1L);
+                }
+        )
+                // then: "se lanza error"
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessageContaining("No existe el pedido al cual usted solicitó cambiar su estado.");
+    }
+
+    @Test
+    void noSePuedeMarcarPedidoCanceladoAUnPedidoQueNoEstaRetirado() {
+        //given
+        negocioService.crearNegocio(nombrePaseoColon, DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        Optional<Negocio> negocio = negocioRepository.findByNombre(nombrePaseoColon);
+        Cliente cliente = new Cliente("Messi");
+        clienteRepository.save(cliente);
+        Pedido pedido1 = new Pedido(negocio.get(), cliente);
+        pedidoRepository.save(pedido1);
+
+        //when
+        assertThatThrownBy(
+                () -> {
+                    negocioService.marcarPedidoCancelado(pedido1.getId());
+                }
+        )
+                // then: "se lanza error"
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("No se puede marcar dicho pedido como cancelado ya que el mismo no se encontraba retirado.");
+    }
+
+    @Test
+    void sePuedeMarcarPedidoDevueltoAUnPedidoQueEstaRetirado() {
+        //given
+        negocioService.crearNegocio(nombrePaseoColon, DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        Optional<Negocio> negocio = negocioRepository.findByNombre(nombrePaseoColon);
+        Cliente cliente = new Cliente("Messi");
+        clienteRepository.save(cliente);
+        Pedido pedido1 = new Pedido(negocio.get(), cliente);
+        pedidoRepository.save(pedido1);
+        negocioService.marcarComienzoDePreparacion(pedido1.getId());
+        negocioService.marcarPedidoListoParaRetirar(pedido1.getId());
+        negocioService.marcarPedidoRetirado(pedido1.getId());
+
+        //when
+        ResponseEntity<HttpStatus> status = negocioService.marcarPedidoDevuelto(pedido1.getId());
+
+        //then
+        assertThat(status).isEqualTo(ResponseEntity.accepted().build());
+    }
+
+    @Test
+    void noSePuedeMarcarPedidoDevueltoAUnPedidoQueNoExiste() {
+        //when
+        assertThatThrownBy(
+                () -> {
+                    negocioService.marcarPedidoDevuelto(1L);
+                }
+        )
+                // then: "se lanza error"
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessageContaining("No existe el pedido al cual usted solicitó cambiar su estado.");
+    }
+
+    @Test
+    void noSePuedeMarcarPedidoDevueltoAUnPedidoQueNoEstaRetirado() {
+        //given
+        negocioService.crearNegocio(nombrePaseoColon, DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        Optional<Negocio> negocio = negocioRepository.findByNombre(nombrePaseoColon);
+        Cliente cliente = new Cliente("Messi");
+        clienteRepository.save(cliente);
+        Pedido pedido1 = new Pedido(negocio.get(), cliente);
+        pedidoRepository.save(pedido1);
+
+        //when
+        assertThatThrownBy(
+                () -> {
+                    negocioService.marcarPedidoDevuelto(pedido1.getId());
+                }
+        )
+                // then: "se lanza error"
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("No se puede marcar dicho pedido como devuelto ya que el mismo no se encontraba retirado.");
+    }
 }

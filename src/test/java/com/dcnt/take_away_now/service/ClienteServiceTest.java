@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
@@ -49,12 +50,15 @@ class ClienteServiceTest {
     void noSePuedeCrearDosClientesConElMismoUsername() {
         //given
         clienteService.crearCliente(username);
-
         //when
-        ResponseEntity<HttpStatus> status = clienteService.crearCliente(username);
-
-        //then
-        assertThat(status).isEqualTo(ResponseEntity.badRequest().build());
+        assertThatThrownBy(
+                () -> {
+                    clienteService.crearCliente(username);
+                }
+        )
+        // then: "se lanza error"
+        .isInstanceOf(RuntimeException.class)
+        .hasMessageContaining("Ya existe un usuario con el nombre ingresado.");
     }
 
     @Test
@@ -67,9 +71,18 @@ class ClienteServiceTest {
         //when
         Collection<Cliente> clientes = clienteService.obtenerClientes();
 
-        //then
         assertThat(clientes.size()).isEqualTo(3);
+        assertThat(existeUsuario(clientes, username)).isTrue();
+        assertThat(existeUsuario(clientes, username + " 10")).isTrue();
+        assertThat(existeUsuario(clientes, username + " Campeon")).isTrue();
+
     }
+
+    private boolean existeUsuario(Collection<Cliente> clientes, String username) {
+        return clientes.stream()
+                .anyMatch(cliente -> cliente.getUsuario().equals(username));
+    }
+
     @Test
     void sePuedeEliminarUnCliente() {
         //given

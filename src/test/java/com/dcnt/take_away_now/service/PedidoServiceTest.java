@@ -51,8 +51,6 @@ class PedidoServiceTest {
     void setUp() {
         cliente = new Cliente("Messi");
         clienteRepository.save(cliente);
-        //TODO: ESTO NO DEBERIA SER NECESARIO
-        cliente.setPuntosDeConfianza(new PuntosDeConfianza(10));
         negocio = new Negocio("Paseo Colon", LocalTime.of(14, 0),LocalTime.of(21, 0), DayOfWeek.MONDAY, DayOfWeek.FRIDAY);
         negocioRepository.save(negocio);
         pancho = new Producto("Pancho");
@@ -85,14 +83,19 @@ class PedidoServiceTest {
         Optional<Producto> alfajor = productoRepository.findByNombre("Alfajor");
 
         //when
-        boolean noEsProductoDeEseNegocio = pedidoService.esUnProductoDeEseNegocio(negocio.getId(), pancho.getId());
         boolean esProductoDeEseNegocio = pedidoService.esUnProductoDeEseNegocio(negocio.getId(), alfajor.get().getId());
 
         //then
-        assertThat(noEsProductoDeEseNegocio).isFalse();
         assertThat(esProductoDeEseNegocio).isTrue();
     }
+    @Test
+    void noEsUnProductoDeEseNegocio() {
+        //when
+        boolean noEsProductoDeEseNegocio = pedidoService.esUnProductoDeEseNegocio(negocio.getId(), pancho.getId());
 
+        //then
+        assertThat(noEsProductoDeEseNegocio).isFalse();
+    }
     @Test
     void sePuedeConfirmarUnPedidoParaEstosProductos() {
         //given

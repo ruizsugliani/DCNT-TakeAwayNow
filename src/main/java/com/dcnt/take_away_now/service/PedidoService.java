@@ -92,7 +92,10 @@ public class PedidoService {
 
         // Actualizamos el saldo y los puntos de confianza del cliente.
         cliente.setSaldo(cliente.getSaldo().minus(precioTotalDelPedido));
-        cliente.setPuntosDeConfianza(cliente.getPuntosDeConfianza().plus(pdcTotalDelPedido));
+        //TODO VERIFICAR CONDICION
+        if (cliente.getPuntosDeConfianza() != null) {
+            cliente.setPuntosDeConfianza(cliente.getPuntosDeConfianza().plus(pdcTotalDelPedido));
+        }
 
         // Actualizamos el saldo del negocio.
         negocio.setSaldo(negocio.getSaldo().plus(precioTotalDelPedido));

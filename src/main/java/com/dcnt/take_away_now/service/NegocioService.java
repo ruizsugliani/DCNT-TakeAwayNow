@@ -112,7 +112,10 @@ public class NegocioService {
 
         // Borramos la relación de la tabla de correlación.
         OptProducto.get().setInventarioRegistro(null);
-        OptNegocio.get().getInventarioRegistros().remove(OptInventarioRegistro.get());
+        //TODO REVISAR CONDICION
+        if (OptNegocio.get().getInventarioRegistros() != null ) {
+            OptNegocio.get().getInventarioRegistros().remove(OptInventarioRegistro.get());
+        }
         inventarioRegistroRepository.deleteByNegocioAndProducto(OptNegocio.get(), OptProducto.get());
         // Borramos el producto de su respectiva tabla.
         productoRepository.deleteById(OptProducto.get().getId());
