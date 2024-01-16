@@ -1,9 +1,8 @@
-package domain;
+package com.dcnt.take_away_now.value_object;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
 
@@ -15,6 +14,10 @@ public class Dinero implements Comparable<Dinero> {
 
     public Dinero(int i) {
         this.monto = BigDecimal.valueOf(i);
+    }
+
+    public BigDecimal toBigDecimal() {
+        return getMonto();
     }
 
     /**
@@ -61,6 +64,11 @@ public class Dinero implements Comparable<Dinero> {
             throw new IllegalStateException("No se puede multiplicar el dinero por cero o un numero negativo.");
         }
         BigDecimal resultado = this.getMonto().multiply(BigDecimal.valueOf(cantidad));
+        return new Dinero(resultado);
+    }
+
+    public Dinero multiply(Dinero otro) {
+        BigDecimal resultado = this.getMonto().multiply(otro.getMonto());
         return new Dinero(resultado);
     }
 
