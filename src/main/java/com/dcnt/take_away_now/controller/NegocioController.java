@@ -2,6 +2,7 @@ package com.dcnt.take_away_now.controller;
 
 import com.dcnt.take_away_now.domain.Negocio;
 import com.dcnt.take_away_now.dto.InventarioRegistroDto;
+import com.dcnt.take_away_now.dto.PedidoDto;
 import com.dcnt.take_away_now.dto.ProductoDto;
 import com.dcnt.take_away_now.service.NegocioService;
 import com.dcnt.take_away_now.value_object.Dinero;
@@ -35,6 +36,11 @@ public class NegocioController {
     @GetMapping("/")
     public Collection<Negocio> obtenerNegocios() {
         return negocioService.obtenerNegocios();
+    }
+
+    @GetMapping("/{idNegocio}/pedidos/")
+    public Collection<PedidoDto> obtenerPedidos(@PathVariable Long idNegocio) {
+        return negocioService.obtenerPedidos(idNegocio);
     }
 
     /******************

@@ -1,6 +1,7 @@
 package com.dcnt.take_away_now.controller;
 
 import com.dcnt.take_away_now.domain.Cliente;
+import com.dcnt.take_away_now.dto.PedidoDto;
 import com.dcnt.take_away_now.service.ClienteService;
 import org.apache.hc.core5.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,11 @@ public class ClienteController {
     @GetMapping("/")
     public Collection<Cliente> obtenerClientes() {
         return clienteService.obtenerClientes();
+    }
+
+    @GetMapping("/{idCliente}/pedidos/")
+    public Collection<PedidoDto> obtenerPedidos(@PathVariable Long idCliente) {
+        return clienteService.obtenerPedidos(idCliente);
     }
 
     /******************

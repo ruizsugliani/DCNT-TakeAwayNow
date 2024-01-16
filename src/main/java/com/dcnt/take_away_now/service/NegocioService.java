@@ -5,6 +5,7 @@ import com.dcnt.take_away_now.domain.Negocio;
 import com.dcnt.take_away_now.domain.Pedido;
 import com.dcnt.take_away_now.domain.Producto;
 import com.dcnt.take_away_now.dto.InventarioRegistroDto;
+import com.dcnt.take_away_now.dto.PedidoDto;
 import com.dcnt.take_away_now.dto.ProductoDto;
 import com.dcnt.take_away_now.enums.EstadoDelPedido;
 import com.dcnt.take_away_now.repository.InventarioRegistroRepository;
@@ -235,43 +236,10 @@ public class NegocioService {
         return ResponseEntity.accepted().build();
     }
 
-    public ResponseEntity<HttpStatus> marcarPedidoRetirado(Long idPedido) {
-        if (!pedidoRepository.existsPedidoById(idPedido)) {
-            throw new NoSuchElementException("No existe el pedido al cual usted solicitó cambiar su estado.");
-        }
-        Pedido pedido = pedidoRepository.findById(idPedido).get();
-        if (pedido.estado != EstadoDelPedido.LISTO_PARA_RETIRAR) {
-            throw new IllegalStateException("No se puede marcar dicho pedido como retirado ya que el mismo no se encuentra listo para retirar.");
-        }
-        pedido.setEstado(EstadoDelPedido.RETIRADO);
-        pedidoRepository.save(pedido);
-        return ResponseEntity.accepted().build();
-    }
+    public Collection<PedidoDto> obtenerPedidos(Long idNegocio) {
+        // Corroboramos la existencia del cliente
+        negocioRepository.findById(idNegocio).orElseThrow( () -> new RuntimeException("No existe el negocio en la base de datos.") );
 
-    public ResponseEntity<HttpStatus> marcarPedidoCancelado(Long idPedido) {
-        if (!pedidoRepository.existsPedidoById(idPedido)) {
-            throw new NoSuchElementException("No existe el pedido al cual usted solicitó cambiar su estado.");
-        }
-        Pedido pedido = pedidoRepository.findById(idPedido).get();
-        if (pedido.estado != EstadoDelPedido.RETIRADO) {
-            throw new IllegalStateException("No se puede marcar dicho pedido como cancelado ya que el mismo no se encontraba retirado.");
-        }
-        pedido.setEstado(EstadoDelPedido.CANCELADO);
-        pedidoRepository.save(pedido);
-        return ResponseEntity.accepted().build();
+        return pedidoRepository.obtenerPedidosDelNegocio(idNegocio);
     }
-
-    public ResponseEntity<HttpStatus> marcarPedidoDevuelto(Long idPedido) {
-        if (!pedidoRepository.existsPedidoById(idPedido)) {
-            throw new NoSuchElementException("No existe el pedido al cual usted solicitó cambiar su estado.");
-        }
-        Pedido pedido = pedidoRepository.findById(idPedido).get();
-        if (pedido.estado != EstadoDelPedido.RETIRADO) {
-            throw new IllegalStateException("No se puede marcar dicho pedido como devuelto ya que el mismo no se encontraba retirado.");
-        }
-        pedido.setEstado(EstadoDelPedido.DEVUELTO);
-        pedidoRepository.save(pedido);
-        return ResponseEntity.accepted().build();
-    }
-
 }
