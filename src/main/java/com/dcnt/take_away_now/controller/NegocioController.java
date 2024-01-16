@@ -60,7 +60,6 @@ public class NegocioController {
         return negocioService.crearNegocio(nombre, diaDeApertura, diaDeCierre, horaApertura, minutoApertura, horaCierre, minutoCierre);
     }
     @PostMapping("/{negocioId}/productos/")
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<org.apache.hc.core5.http.HttpStatus> crearProducto(
             @PathVariable Long negocioId,
             @RequestParam String nombreDelProducto,

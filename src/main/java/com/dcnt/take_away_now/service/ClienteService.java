@@ -21,6 +21,7 @@ import java.util.Optional;
 public class ClienteService {
     private final ClienteRepository clienteRepository;
     private final PedidoRepository pedidoRepository;
+    private final ProductoPedidoRepository productoPedidoRepository;
 
     public Collection<Cliente> obtenerClientes() {
         return clienteRepository.findAll();

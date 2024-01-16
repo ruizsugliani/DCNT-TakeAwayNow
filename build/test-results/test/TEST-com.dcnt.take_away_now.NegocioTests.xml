@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.dcnt.take_away_now.NegocioTests" tests="5" skipped="0" failures="0" errors="0" timestamp="2024-01-16T23:38:52" hostname="DESKTOP-FB7HCB6" time="0.032">
+  <properties/>
+  <testcase name="crearUnNegocioConElHorarioDeAperturaPosteriorAlDeCierreLanzaException()" classname="com.dcnt.take_away_now.NegocioTests" time="0.019"/>
+  <testcase name="unNegocioSeEncuentraAbiertoSiAbreDeLunesAViernesYPreguntoUnJueves()" classname="com.dcnt.take_away_now.NegocioTests" time="0.004"/>
+  <testcase name="unNegocioSeEncuentraCerradoSiAbreDeLunesAViernesYPreguntoUnSabado()" classname="com.dcnt.take_away_now.NegocioTests" time="0.001"/>
+  <testcase name="contextLoads()" classname="com.dcnt.take_away_now.NegocioTests" time="0.0"/>
+  <testcase name="unNegocioSeEncuentraCerradoSiAbreDeLunesAViernesDe9A18YPreguntoUnMartesPorLaMadrugada()" classname="com.dcnt.take_away_now.NegocioTests" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
