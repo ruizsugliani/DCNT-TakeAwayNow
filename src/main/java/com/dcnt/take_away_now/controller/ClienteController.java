@@ -7,6 +7,7 @@ import org.apache.hc.core5.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -32,12 +33,22 @@ public class ClienteController {
         return clienteService.obtenerPedidos(idCliente);
     }
 
+    @GetMapping("/{idCliente}/usuario")
+    public String obtenerUsuario(@PathVariable Long idCliente) {
+        return clienteService.obtenerUsuario(idCliente);
+    }
+
     /******************
      *   Métodos Post *
      ******************/
     @PostMapping("/")
     public ResponseEntity<HttpStatus> crearCliente(@RequestBody String nombreUsuario) {
         return clienteService.crearCliente(nombreUsuario);
+    }
+
+    @PostMapping("/{idCliente}/cargaDeSaldo/{saldoACargar}")
+    public ResponseEntity<HttpStatus> cargarSaldo(@RequestParam Long idCliente, @RequestParam BigDecimal saldoACargar) {
+        return clienteService.cargarSaldo(idCliente, saldoACargar);
     }
 
     /*******************
