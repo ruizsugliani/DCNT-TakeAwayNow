@@ -441,8 +441,8 @@ class NegocioServiceTest {
                 }
         )
         // then: "se lanza error"
-        .isInstanceOf(NoSuchElementException.class)
-        .hasMessageContaining("No existe el pedido al cual usted solicitó cambiar su estado.");
+        .isInstanceOf(RuntimeException.class)
+        .hasMessageContaining("No existe el pedido al cual usted quiere confirmar el retiro.");
     }
 
     @Test
@@ -463,7 +463,7 @@ class NegocioServiceTest {
         )
         // then: "se lanza error"
         .isInstanceOf(IllegalStateException.class)
-        .hasMessageContaining("No se puede marcar dicho pedido como retirado ya que el mismo no se encuentra listo para retirar.");
+        .hasMessageContaining("No se puede retirar dicho pedido ya que el mismo no se encuentra listo para retirar.");
     }
 
     @Test
@@ -495,8 +495,8 @@ class NegocioServiceTest {
                 }
         )
                 // then: "se lanza error"
-                .isInstanceOf(NoSuchElementException.class)
-                .hasMessageContaining("No existe el pedido al cual usted solicitó cambiar su estado.");
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("No existe el pedido que usted busca cancelar.");
     }
 
     @Test
@@ -517,7 +517,7 @@ class NegocioServiceTest {
         )
                 // then: "se lanza error"
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("No se puede marcar dicho pedido como cancelado ya que el mismo no se encontraba retirado.");
+                .hasMessageContaining("No se puede cancelar dicho pedido ya que el mismo no se encontraba retirado.");
     }
 
     @Test
@@ -549,8 +549,8 @@ class NegocioServiceTest {
                 }
         )
                 // then: "se lanza error"
-                .isInstanceOf(NoSuchElementException.class)
-                .hasMessageContaining("No existe el pedido al cual usted solicitó cambiar su estado.");
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("No existe el pedido que usted busca devolver.");
     }
 
     @Test
@@ -571,6 +571,6 @@ class NegocioServiceTest {
         )
                 // then: "se lanza error"
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("No se puede marcar dicho pedido como devuelto ya que el mismo no se encontraba retirado.");
+                .hasMessageContaining("No se puede devolver dicho pedido ya que el mismo no se encontraba retirado.");
     }
 }
