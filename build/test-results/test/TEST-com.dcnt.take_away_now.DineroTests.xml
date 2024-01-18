@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.dcnt.take_away_now.DineroTests" tests="8" skipped="0" failures="0" errors="0" timestamp="2024-01-18T14:53:05" hostname="DESKTOP-FB7HCB6" time="0.161">
+<testsuite name="com.dcnt.take_away_now.DineroTests" tests="8" skipped="0" failures="0" errors="0" timestamp="2024-01-18T16:17:13" hostname="DESKTOP-FB7HCB6" time="0.178">
   <properties/>
-  <testcase name="noPuedoMultiplicarDineroPorUnNumeroNegativo()" classname="com.dcnt.take_away_now.DineroTests" time="0.134"/>
-  <testcase name="tengoDosPesosLoMultiplicoPorCincoYObtengoDiezPesos()" classname="com.dcnt.take_away_now.DineroTests" time="0.008"/>
+  <testcase name="noPuedoMultiplicarDineroPorUnNumeroNegativo()" classname="com.dcnt.take_away_now.DineroTests" time="0.145"/>
+  <testcase name="tengoDosPesosLoMultiplicoPorCincoYObtengoDiezPesos()" classname="com.dcnt.take_away_now.DineroTests" time="0.01"/>
   <testcase name="conviertoDosPesosEnDineroABigDecimal()" classname="com.dcnt.take_away_now.DineroTests" time="0.005"/>
   <testcase name="noPuedoTenerDineroNegativo()" classname="com.dcnt.take_away_now.DineroTests" time="0.001"/>
-  <testcase name="noPuedoMultiplicarDineroPorCero()" classname="com.dcnt.take_away_now.DineroTests" time="0.002"/>
+  <testcase name="noPuedoMultiplicarDineroPorCero()" classname="com.dcnt.take_away_now.DineroTests" time="0.003"/>
   <testcase name="tengoDosPesosLeSumoTresPesosYObtengoCincoPesos()" classname="com.dcnt.take_away_now.DineroTests" time="0.001"/>
-  <testcase name="contextLoads()" classname="com.dcnt.take_away_now.DineroTests" time="0.001"/>
-  <testcase name="conviertoVariableBigDecimalConValIgualADosAValueObjectDineroConMontoIgualADos()" classname="com.dcnt.take_away_now.DineroTests" time="0.001"/>
+  <testcase name="contextLoads()" classname="com.dcnt.take_away_now.DineroTests" time="0.002"/>
+  <testcase name="conviertoVariableBigDecimalConValIgualADosAValueObjectDineroConMontoIgualADos()" classname="com.dcnt.take_away_now.DineroTests" time="0.002"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
