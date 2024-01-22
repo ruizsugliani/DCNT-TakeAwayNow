@@ -3,17 +3,17 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <meta http-equiv="x-ua-compatible" content="IE=edge"/>
-<title>Test results - PedidoServiceTest</title>
+<title>Test results - InvenarioRegistroRepositoryTest</title>
 <link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
 <link href="../css/style.css" rel="stylesheet" type="text/css"/>
 <script src="../js/report.js" type="text/javascript"></script>
 </head>
 <body>
 <div id="content">
-<h1>PedidoServiceTest</h1>
+<h1>InvenarioRegistroRepositoryTest</h1>
 <div class="breadcrumbs">
 <a href="../index.html">all</a> &gt; 
-<a href="../packages/com.dcnt.take_away_now.service.html">com.dcnt.take_away_now.service</a> &gt; PedidoServiceTest</div>
+<a href="../packages/com.dcnt.take_away_now.repository.html">com.dcnt.take_away_now.repository</a> &gt; InvenarioRegistroRepositoryTest</div>
 <div id="summary">
 <table>
 <tr>
@@ -23,7 +23,7 @@
 <tr>
 <td>
 <div class="infoBox" id="tests">
-<div class="counter">10</div>
+<div class="counter">14</div>
 <p>tests</p>
 </div>
 </td>
@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.406s</div>
+<div class="counter">0.511s</div>
 <p>duration</p>
 </div>
 </td>
@@ -78,52 +78,72 @@
 </tr>
 </thead>
 <tr>
-<td class="success">esUnProductoDeEseNegocio()</td>
-<td class="success">0.038s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">noEsUnProductoDeEseNegocio()</td>
+<td class="success">existeInventarioRegistroPorNegocioYProducto()</td>
 <td class="success">0.024s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
-<td class="success">noSePuedeConfirmarUnPedidoParaEstosProductosPorqueNoEsUnProductoDelNegocio()</td>
-<td class="success">0.017s</td>
+<td class="success">noExisteInventarioRegistroPorNegocioYProductoConNegocioYProductoIncorrecto()</td>
+<td class="success">0.024s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
-<td class="success">noSePuedeConfirmarUnPedidoParaEstosProductosPorqueNoHayStockSuficiente()</td>
-<td class="success">0.047s</td>
+<td class="success">noExisteInventarioRegistroPorNegocioYProductoConProductoIncorrecto()</td>
+<td class="success">0.061s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
-<td class="success">obtenerPedidos()</td>
-<td class="success">0.016s</td>
+<td class="success">noExisteInventarioRegistroPorNegocioYProductoInexistente()</td>
+<td class="success">0.033s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
-<td class="success">sePuedeConfirmarPedido()</td>
-<td class="success">0.029s</td>
+<td class="success">noExisteInventarioRegistroPorNegocioyProductoConNegocioIncorrecto()</td>
+<td class="success">0.021s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
-<td class="success">sePuedeConfirmarUnPedidoParaEstosProductos()</td>
-<td class="success">0.106s</td>
+<td class="success">noSeEliminaInventarioRegistroPorNegocioYProductoConNegocioIncorrecto()</td>
+<td class="success">0.024s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
-<td class="success">verificarPedido()</td>
-<td class="success">0.037s</td>
+<td class="success">noSeEliminaInventarioRegistroPorNegocioYProductoConNegocioYProductoIncorrectos()</td>
+<td class="success">0.026s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
-<td class="success">verificarPedidoLanzaQueNoExisteCliente()</td>
-<td class="success">0.054s</td>
+<td class="success">noSeEliminaInventarioRegistroPorNegocioYProductoConProductoIncorrecto()</td>
+<td class="success">0.065s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
-<td class="success">verificarPedidoLanzaQueNoExisteNegocio()</td>
+<td class="success">noSeEncuentraInventarioRegisrtroPorNegocioYProductoInexistente()</td>
+<td class="success">0.042s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">noSeEncuentranProductosDelNegocioSinProductos()</td>
+<td class="success">0.018s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">seEliminaInventarioRegistroPorNegocioYProducto()</td>
+<td class="success">0.040s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">seEncuentraElProductoDelNegocioConIdNegocio()</td>
+<td class="success">0.060s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">seEncuentraInventarioRegistroPorNegocioYProducto()</td>
+<td class="success">0.035s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">seEncuentranLosProductosDelNegocioConIdNegocio()</td>
 <td class="success">0.038s</td>
 <td class="success">passed</td>
 </tr>
@@ -132,15 +152,15 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>2024-01-18T13:17:35.692-03:00  INFO 7008 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.dcnt.take_away_now.service.PedidoServiceTest]: PedidoServiceTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2024-01-18T13:17:35.724-03:00  INFO 7008 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.dcnt.take_away_now.TakeAwayNowApplication for test class com.dcnt.take_away_now.service.PedidoServiceTest
+<pre>2024-01-21T23:32:29.960-03:00  INFO 2188 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.dcnt.take_away_now.repository.InvenarioRegistroRepositoryTest]: InvenarioRegistroRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2024-01-21T23:32:30.000-03:00  INFO 2188 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.dcnt.take_away_now.TakeAwayNowApplication for test class com.dcnt.take_away_now.repository.InvenarioRegistroRepositoryTest
 Hibernate: 
     insert 
     into
-        clientes
-        (pdc, saldo, usuario, id_cliente) 
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
     values
-        (?, ?, ?, default)
+        (?, ?, ?, ?, ?, ?, default)
 Hibernate: 
     insert 
     into
@@ -156,733 +176,17 @@ Hibernate:
     values
         (?, ?, default)
 Hibernate: 
-    select
-        ir1_0.id_inventario_registro 
-    from
-        inventario_registros ir1_0 
-    where
-        ir1_0.id_negocio=? 
-        and ir1_0.id_producto=? 
-    fetch
-        first ? rows only
-Hibernate: 
-    insert 
-    into
-        clientes
-        (pdc, saldo, usuario, id_cliente) 
-    values
-        (?, ?, ?, default)
-Hibernate: 
-    insert 
-    into
-        negocios
-        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
-    values
-        (?, ?, ?, ?, ?, ?, default)
-Hibernate: 
     insert 
     into
         productos
         (id_inventario_registro, nombre, id_producto) 
     values
         (?, ?, default)
-Hibernate: 
-    select
-        p1_0.id_producto,
-        p1_0.id_inventario_registro,
-        p1_0.nombre 
-    from
-        productos p1_0 
-    where
-        p1_0.nombre=?
 Hibernate: 
     insert 
     into
         inventario_registros
         (id_negocio, precio_unitario, id_producto, recompensa_pdc, stock, id_inventario_registro) 
-    values
-        (?, ?, ?, ?, ?, default)
-Hibernate: 
-    insert 
-    into
-        productos
-        (id_inventario_registro, nombre, id_producto) 
-    values
-        (?, ?, default)
-Hibernate: 
-    update
-        inventario_registros 
-    set
-        id_negocio=?,
-        precio_unitario=?,
-        id_producto=?,
-        recompensa_pdc=?,
-        stock=? 
-    where
-        id_inventario_registro=?
-Hibernate: 
-    update
-        productos 
-    set
-        id_inventario_registro=?,
-        nombre=? 
-    where
-        id_producto=?
-Hibernate: 
-    select
-        p1_0.id_producto,
-        p1_0.id_inventario_registro,
-        p1_0.nombre 
-    from
-        productos p1_0 
-    where
-        p1_0.nombre=?
-Hibernate: 
-    select
-        ir1_0.id_inventario_registro 
-    from
-        inventario_registros ir1_0 
-    where
-        ir1_0.id_negocio=? 
-        and ir1_0.id_producto=? 
-    fetch
-        first ? rows only
-Hibernate: 
-    select
-        ir1_0.id_inventario_registro,
-        ir1_0.id_negocio,
-        ir1_0.precio_unitario,
-        ir1_0.id_producto,
-        ir1_0.recompensa_pdc,
-        ir1_0.stock 
-    from
-        inventario_registros ir1_0 
-    where
-        ir1_0.id_negocio=? 
-        and ir1_0.id_producto=?
-Hibernate: 
-    insert 
-    into
-        clientes
-        (pdc, saldo, usuario, id_cliente) 
-    values
-        (?, ?, ?, default)
-Hibernate: 
-    insert 
-    into
-        negocios
-        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
-    values
-        (?, ?, ?, ?, ?, ?, default)
-Hibernate: 
-    insert 
-    into
-        productos
-        (id_inventario_registro, nombre, id_producto) 
-    values
-        (?, ?, default)
-Hibernate: 
-    select
-        ir1_0.id_inventario_registro 
-    from
-        inventario_registros ir1_0 
-    where
-        ir1_0.id_negocio=? 
-        and ir1_0.id_producto=? 
-    fetch
-        first ? rows only
-Hibernate: 
-    insert 
-    into
-        clientes
-        (pdc, saldo, usuario, id_cliente) 
-    values
-        (?, ?, ?, default)
-Hibernate: 
-    insert 
-    into
-        negocios
-        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
-    values
-        (?, ?, ?, ?, ?, ?, default)
-Hibernate: 
-    insert 
-    into
-        productos
-        (id_inventario_registro, nombre, id_producto) 
-    values
-        (?, ?, default)
-Hibernate: 
-    select
-        p1_0.id_producto,
-        p1_0.id_inventario_registro,
-        p1_0.nombre 
-    from
-        productos p1_0 
-    where
-        p1_0.nombre=?
-Hibernate: 
-    insert 
-    into
-        inventario_registros
-        (id_negocio, precio_unitario, id_producto, recompensa_pdc, stock, id_inventario_registro) 
-    values
-        (?, ?, ?, ?, ?, default)
-Hibernate: 
-    insert 
-    into
-        productos
-        (id_inventario_registro, nombre, id_producto) 
-    values
-        (?, ?, default)
-Hibernate: 
-    update
-        inventario_registros 
-    set
-        id_negocio=?,
-        precio_unitario=?,
-        id_producto=?,
-        recompensa_pdc=?,
-        stock=? 
-    where
-        id_inventario_registro=?
-Hibernate: 
-    update
-        productos 
-    set
-        id_inventario_registro=?,
-        nombre=? 
-    where
-        id_producto=?
-Hibernate: 
-    select
-        p1_0.id_producto,
-        p1_0.id_inventario_registro,
-        p1_0.nombre 
-    from
-        productos p1_0 
-    where
-        p1_0.nombre=?
-Hibernate: 
-    select
-        c1_0.id_cliente,
-        c1_0.pdc,
-        c1_0.saldo,
-        c1_0.usuario 
-    from
-        clientes c1_0 
-    where
-        c1_0.id_cliente=?
-Hibernate: 
-    insert 
-    into
-        clientes
-        (pdc, saldo, usuario, id_cliente) 
-    values
-        (?, ?, ?, default)
-Hibernate: 
-    insert 
-    into
-        negocios
-        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
-    values
-        (?, ?, ?, ?, ?, ?, default)
-Hibernate: 
-    insert 
-    into
-        productos
-        (id_inventario_registro, nombre, id_producto) 
-    values
-        (?, ?, default)
-Hibernate: 
-    select
-        p1_0.id_producto,
-        p1_0.id_inventario_registro,
-        p1_0.nombre 
-    from
-        productos p1_0 
-    where
-        p1_0.nombre=?
-Hibernate: 
-    insert 
-    into
-        inventario_registros
-        (id_negocio, precio_unitario, id_producto, recompensa_pdc, stock, id_inventario_registro) 
-    values
-        (?, ?, ?, ?, ?, default)
-Hibernate: 
-    insert 
-    into
-        productos
-        (id_inventario_registro, nombre, id_producto) 
-    values
-        (?, ?, default)
-Hibernate: 
-    update
-        inventario_registros 
-    set
-        id_negocio=?,
-        precio_unitario=?,
-        id_producto=?,
-        recompensa_pdc=?,
-        stock=? 
-    where
-        id_inventario_registro=?
-Hibernate: 
-    update
-        productos 
-    set
-        id_inventario_registro=?,
-        nombre=? 
-    where
-        id_producto=?
-Hibernate: 
-    select
-        p1_0.id_producto,
-        p1_0.id_inventario_registro,
-        p1_0.nombre 
-    from
-        productos p1_0 
-    where
-        p1_0.nombre=?
-Hibernate: 
-    insert 
-    into
-        inventario_registros
-        (id_negocio, precio_unitario, id_producto, recompensa_pdc, stock, id_inventario_registro) 
-    values
-        (?, ?, ?, ?, ?, default)
-Hibernate: 
-    insert 
-    into
-        productos
-        (id_inventario_registro, nombre, id_producto) 
-    values
-        (?, ?, default)
-Hibernate: 
-    update
-        inventario_registros 
-    set
-        id_negocio=?,
-        precio_unitario=?,
-        id_producto=?,
-        recompensa_pdc=?,
-        stock=? 
-    where
-        id_inventario_registro=?
-Hibernate: 
-    update
-        productos 
-    set
-        id_inventario_registro=?,
-        nombre=? 
-    where
-        id_producto=?
-Hibernate: 
-    select
-        p1_0.id_producto,
-        p1_0.id_inventario_registro,
-        p1_0.nombre 
-    from
-        productos p1_0 
-    where
-        p1_0.nombre=?
-Hibernate: 
-    insert 
-    into
-        inventario_registros
-        (id_negocio, precio_unitario, id_producto, recompensa_pdc, stock, id_inventario_registro) 
-    values
-        (?, ?, ?, ?, ?, default)
-Hibernate: 
-    insert 
-    into
-        productos
-        (id_inventario_registro, nombre, id_producto) 
-    values
-        (?, ?, default)
-Hibernate: 
-    update
-        inventario_registros 
-    set
-        id_negocio=?,
-        precio_unitario=?,
-        id_producto=?,
-        recompensa_pdc=?,
-        stock=? 
-    where
-        id_inventario_registro=?
-Hibernate: 
-    update
-        productos 
-    set
-        id_inventario_registro=?,
-        nombre=? 
-    where
-        id_producto=?
-Hibernate: 
-    select
-        p1_0.id_producto,
-        p1_0.id_inventario_registro,
-        p1_0.nombre 
-    from
-        productos p1_0 
-    where
-        p1_0.nombre=?
-Hibernate: 
-    select
-        p1_0.id_producto,
-        p1_0.id_inventario_registro,
-        p1_0.nombre 
-    from
-        productos p1_0 
-    where
-        p1_0.nombre=?
-Hibernate: 
-    select
-        p1_0.id_producto,
-        p1_0.id_inventario_registro,
-        p1_0.nombre 
-    from
-        productos p1_0 
-    where
-        p1_0.nombre=?
-Hibernate: 
-    select
-        ir1_0.id_inventario_registro 
-    from
-        inventario_registros ir1_0 
-    where
-        ir1_0.id_negocio=? 
-        and ir1_0.id_producto=? 
-    fetch
-        first ? rows only
-Hibernate: 
-    select
-        ir1_0.id_inventario_registro,
-        ir1_0.id_negocio,
-        ir1_0.precio_unitario,
-        ir1_0.id_producto,
-        ir1_0.recompensa_pdc,
-        ir1_0.stock 
-    from
-        inventario_registros ir1_0 
-    where
-        ir1_0.id_negocio=? 
-        and ir1_0.id_producto=?
-Hibernate: 
-    select
-        ir1_0.id_inventario_registro 
-    from
-        inventario_registros ir1_0 
-    where
-        ir1_0.id_negocio=? 
-        and ir1_0.id_producto=? 
-    fetch
-        first ? rows only
-Hibernate: 
-    select
-        ir1_0.id_inventario_registro,
-        ir1_0.id_negocio,
-        ir1_0.precio_unitario,
-        ir1_0.id_producto,
-        ir1_0.recompensa_pdc,
-        ir1_0.stock 
-    from
-        inventario_registros ir1_0 
-    where
-        ir1_0.id_negocio=? 
-        and ir1_0.id_producto=?
-Hibernate: 
-    select
-        ir1_0.id_inventario_registro 
-    from
-        inventario_registros ir1_0 
-    where
-        ir1_0.id_negocio=? 
-        and ir1_0.id_producto=? 
-    fetch
-        first ? rows only
-Hibernate: 
-    select
-        ir1_0.id_inventario_registro,
-        ir1_0.id_negocio,
-        ir1_0.precio_unitario,
-        ir1_0.id_producto,
-        ir1_0.recompensa_pdc,
-        ir1_0.stock 
-    from
-        inventario_registros ir1_0 
-    where
-        ir1_0.id_negocio=? 
-        and ir1_0.id_producto=?
-Hibernate: 
-    insert 
-    into
-        clientes
-        (pdc, saldo, usuario, id_cliente) 
-    values
-        (?, ?, ?, default)
-Hibernate: 
-    insert 
-    into
-        negocios
-        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
-    values
-        (?, ?, ?, ?, ?, ?, default)
-Hibernate: 
-    insert 
-    into
-        productos
-        (id_inventario_registro, nombre, id_producto) 
-    values
-        (?, ?, default)
-Hibernate: 
-    select
-        p1_0.id_producto,
-        p1_0.id_inventario_registro,
-        p1_0.nombre 
-    from
-        productos p1_0 
-    where
-        p1_0.nombre=?
-Hibernate: 
-    insert 
-    into
-        inventario_registros
-        (id_negocio, precio_unitario, id_producto, recompensa_pdc, stock, id_inventario_registro) 
-    values
-        (?, ?, ?, ?, ?, default)
-Hibernate: 
-    insert 
-    into
-        productos
-        (id_inventario_registro, nombre, id_producto) 
-    values
-        (?, ?, default)
-Hibernate: 
-    update
-        inventario_registros 
-    set
-        id_negocio=?,
-        precio_unitario=?,
-        id_producto=?,
-        recompensa_pdc=?,
-        stock=? 
-    where
-        id_inventario_registro=?
-Hibernate: 
-    update
-        productos 
-    set
-        id_inventario_registro=?,
-        nombre=? 
-    where
-        id_producto=?
-Hibernate: 
-    select
-        p1_0.id_producto,
-        p1_0.id_inventario_registro,
-        p1_0.nombre 
-    from
-        productos p1_0 
-    where
-        p1_0.nombre=?
-Hibernate: 
-    select
-        n1_0.id_negocio,
-        n1_0.dia_apertura,
-        n1_0.dia_cierre,
-        n1_0.horario_apertura,
-        n1_0.horario_cierre,
-        n1_0.nombre,
-        n1_0.saldo 
-    from
-        negocios n1_0 
-    where
-        n1_0.id_negocio=?
-Hibernate: 
-    insert 
-    into
-        clientes
-        (pdc, saldo, usuario, id_cliente) 
-    values
-        (?, ?, ?, default)
-Hibernate: 
-    insert 
-    into
-        negocios
-        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
-    values
-        (?, ?, ?, ?, ?, ?, default)
-Hibernate: 
-    insert 
-    into
-        productos
-        (id_inventario_registro, nombre, id_producto) 
-    values
-        (?, ?, default)
-Hibernate: 
-    select
-        p1_0.id_producto,
-        p1_0.id_inventario_registro,
-        p1_0.nombre 
-    from
-        productos p1_0 
-    where
-        p1_0.nombre=?
-Hibernate: 
-    insert 
-    into
-        inventario_registros
-        (id_negocio, precio_unitario, id_producto, recompensa_pdc, stock, id_inventario_registro) 
-    values
-        (?, ?, ?, ?, ?, default)
-Hibernate: 
-    insert 
-    into
-        productos
-        (id_inventario_registro, nombre, id_producto) 
-    values
-        (?, ?, default)
-Hibernate: 
-    update
-        inventario_registros 
-    set
-        id_negocio=?,
-        precio_unitario=?,
-        id_producto=?,
-        recompensa_pdc=?,
-        stock=? 
-    where
-        id_inventario_registro=?
-Hibernate: 
-    update
-        productos 
-    set
-        id_inventario_registro=?,
-        nombre=? 
-    where
-        id_producto=?
-Hibernate: 
-    select
-        p1_0.id_producto,
-        p1_0.id_inventario_registro,
-        p1_0.nombre 
-    from
-        productos p1_0 
-    where
-        p1_0.nombre=?
-Hibernate: 
-    select
-        ir1_0.id_inventario_registro 
-    from
-        inventario_registros ir1_0 
-    where
-        ir1_0.id_negocio=? 
-        and ir1_0.id_producto=? 
-    fetch
-        first ? rows only
-Hibernate: 
-    insert 
-    into
-        clientes
-        (pdc, saldo, usuario, id_cliente) 
-    values
-        (?, ?, ?, default)
-Hibernate: 
-    insert 
-    into
-        negocios
-        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
-    values
-        (?, ?, ?, ?, ?, ?, default)
-Hibernate: 
-    insert 
-    into
-        productos
-        (id_inventario_registro, nombre, id_producto) 
-    values
-        (?, ?, default)
-Hibernate: 
-    select
-        p1_0.id_producto,
-        p1_0.id_inventario_registro,
-        p1_0.nombre 
-    from
-        productos p1_0 
-    where
-        p1_0.nombre=?
-Hibernate: 
-    insert 
-    into
-        inventario_registros
-        (id_negocio, precio_unitario, id_producto, recompensa_pdc, stock, id_inventario_registro) 
-    values
-        (?, ?, ?, ?, ?, default)
-Hibernate: 
-    insert 
-    into
-        productos
-        (id_inventario_registro, nombre, id_producto) 
-    values
-        (?, ?, default)
-Hibernate: 
-    update
-        inventario_registros 
-    set
-        id_negocio=?,
-        precio_unitario=?,
-        id_producto=?,
-        recompensa_pdc=?,
-        stock=? 
-    where
-        id_inventario_registro=?
-Hibernate: 
-    update
-        productos 
-    set
-        id_inventario_registro=?,
-        nombre=? 
-    where
-        id_producto=?
-Hibernate: 
-    select
-        p1_0.id_producto,
-        p1_0.id_inventario_registro,
-        p1_0.nombre 
-    from
-        productos p1_0 
-    where
-        p1_0.nombre=?
-Hibernate: 
-    select
-        ir1_0.id_inventario_registro 
-    from
-        inventario_registros ir1_0 
-    where
-        ir1_0.id_negocio=? 
-        and ir1_0.id_producto=? 
-    fetch
-        first ? rows only
-Hibernate: 
-    select
-        ir1_0.id_inventario_registro,
-        ir1_0.id_negocio,
-        ir1_0.precio_unitario,
-        ir1_0.id_producto,
-        ir1_0.recompensa_pdc,
-        ir1_0.stock 
-    from
-        inventario_registros ir1_0 
-    where
-        ir1_0.id_negocio=? 
-        and ir1_0.id_producto=?
-Hibernate: 
-    insert 
-    into
-        pedidos
-        (id_cliente, estado, fecha_y_hora_entrega, id_negocio, precio_total, id_pedido) 
     values
         (?, ?, ?, ?, ?, default)
 Hibernate: 
@@ -901,17 +205,10 @@ Hibernate:
 Hibernate: 
     insert 
     into
-        productos_pedidos
-        (cantidad, id_pedido, id_producto, id_producto_pedido) 
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
     values
-        (?, ?, ?, default)
-Hibernate: 
-    insert 
-    into
-        clientes
-        (pdc, saldo, usuario, id_cliente) 
-    values
-        (?, ?, ?, default)
+        (?, ?, ?, ?, ?, ?, default)
 Hibernate: 
     insert 
     into
@@ -927,14 +224,12 @@ Hibernate:
     values
         (?, ?, default)
 Hibernate: 
-    select
-        p1_0.id_producto,
-        p1_0.id_inventario_registro,
-        p1_0.nombre 
-    from
-        productos p1_0 
-    where
-        p1_0.nombre=?
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
 Hibernate: 
     insert 
     into
@@ -942,13 +237,6 @@ Hibernate:
         (id_negocio, precio_unitario, id_producto, recompensa_pdc, stock, id_inventario_registro) 
     values
         (?, ?, ?, ?, ?, default)
-Hibernate: 
-    insert 
-    into
-        productos
-        (id_inventario_registro, nombre, id_producto) 
-    values
-        (?, ?, default)
 Hibernate: 
     update
         inventario_registros 
@@ -961,29 +249,18 @@ Hibernate:
     where
         id_inventario_registro=?
 Hibernate: 
-    update
-        productos 
-    set
-        id_inventario_registro=?,
-        nombre=? 
-    where
-        id_producto=?
-Hibernate: 
     select
-        p1_0.id_producto,
-        p1_0.id_inventario_registro,
-        p1_0.nombre 
+        ir1_0.id_inventario_registro,
+        ir1_0.id_negocio,
+        ir1_0.precio_unitario,
+        ir1_0.id_producto,
+        ir1_0.recompensa_pdc,
+        ir1_0.stock 
     from
-        productos p1_0 
+        inventario_registros ir1_0 
     where
-        p1_0.nombre=?
-Hibernate: 
-    insert 
-    into
-        pedidos
-        (id_cliente, estado, fecha_y_hora_entrega, id_negocio, precio_total, id_pedido) 
-    values
-        (?, ?, ?, ?, ?, default)
+        ir1_0.id_negocio=? 
+        and ir1_0.id_producto=?
 Hibernate: 
     select
         ir1_0.id_inventario_registro,
@@ -1000,17 +277,10 @@ Hibernate:
 Hibernate: 
     insert 
     into
-        productos_pedidos
-        (cantidad, id_pedido, id_producto, id_producto_pedido) 
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
     values
-        (?, ?, ?, default)
-Hibernate: 
-    insert 
-    into
-        clientes
-        (pdc, saldo, usuario, id_cliente) 
-    values
-        (?, ?, ?, default)
+        (?, ?, ?, ?, ?, ?, default)
 Hibernate: 
     insert 
     into
@@ -1028,34 +298,708 @@ Hibernate:
 Hibernate: 
     insert 
     into
-        pedidos
-        (id_cliente, estado, fecha_y_hora_entrega, id_negocio, precio_total, id_pedido) 
+        productos
+        (id_inventario_registro, nombre, id_producto) 
     values
-        (?, ?, ?, ?, ?, default)
+        (?, ?, default)
 Hibernate: 
     insert 
     into
-        pedidos
-        (id_cliente, estado, fecha_y_hora_entrega, id_negocio, precio_total, id_pedido) 
+        inventario_registros
+        (id_negocio, precio_unitario, id_producto, recompensa_pdc, stock, id_inventario_registro) 
     values
         (?, ?, ?, ?, ?, default)
 Hibernate: 
+    update
+        inventario_registros 
+    set
+        id_negocio=?,
+        precio_unitario=?,
+        id_producto=?,
+        recompensa_pdc=?,
+        stock=? 
+    where
+        id_inventario_registro=?
+Hibernate: 
+    select
+        ir1_0.id_inventario_registro,
+        ir1_0.id_negocio,
+        ir1_0.precio_unitario,
+        ir1_0.id_producto,
+        ir1_0.recompensa_pdc,
+        ir1_0.stock 
+    from
+        inventario_registros ir1_0 
+    where
+        ir1_0.id_negocio=? 
+        and ir1_0.id_producto=?
+Hibernate: 
     insert 
     into
-        pedidos
-        (id_cliente, estado, fecha_y_hora_entrega, id_negocio, precio_total, id_pedido) 
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        inventario_registros
+        (id_negocio, precio_unitario, id_producto, recompensa_pdc, stock, id_inventario_registro) 
+    values
+        (?, ?, ?, ?, ?, default)
+Hibernate: 
+    update
+        inventario_registros 
+    set
+        id_negocio=?,
+        precio_unitario=?,
+        id_producto=?,
+        recompensa_pdc=?,
+        stock=? 
+    where
+        id_inventario_registro=?
+Hibernate: 
+    select
+        ir1_0.id_inventario_registro 
+    from
+        inventario_registros ir1_0 
+    where
+        ir1_0.id_negocio=? 
+        and ir1_0.id_producto=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        inventario_registros
+        (id_negocio, precio_unitario, id_producto, recompensa_pdc, stock, id_inventario_registro) 
+    values
+        (?, ?, ?, ?, ?, default)
+Hibernate: 
+    update
+        inventario_registros 
+    set
+        id_negocio=?,
+        precio_unitario=?,
+        id_producto=?,
+        recompensa_pdc=?,
+        stock=? 
+    where
+        id_inventario_registro=?
+Hibernate: 
+    select
+        ir1_0.id_inventario_registro 
+    from
+        inventario_registros ir1_0 
+    where
+        ir1_0.id_negocio=? 
+        and ir1_0.id_producto=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        inventario_registros
+        (id_negocio, precio_unitario, id_producto, recompensa_pdc, stock, id_inventario_registro) 
+    values
+        (?, ?, ?, ?, ?, default)
+Hibernate: 
+    update
+        inventario_registros 
+    set
+        id_negocio=?,
+        precio_unitario=?,
+        id_producto=?,
+        recompensa_pdc=?,
+        stock=? 
+    where
+        id_inventario_registro=?
+Hibernate: 
+    select
+        p1_0.id_producto,
+        p1_0.nombre,
+        ir1_0.stock,
+        ir1_0.precio_unitario,
+        ir1_0.recompensa_pdc 
+    from
+        inventario_registros ir1_0 
+    join
+        productos p1_0 
+            on ir1_0.id_producto=p1_0.id_producto 
+    where
+        ir1_0.id_negocio=?
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        inventario_registros
+        (id_negocio, precio_unitario, id_producto, recompensa_pdc, stock, id_inventario_registro) 
+    values
+        (?, ?, ?, ?, ?, default)
+Hibernate: 
+    update
+        inventario_registros 
+    set
+        id_negocio=?,
+        precio_unitario=?,
+        id_producto=?,
+        recompensa_pdc=?,
+        stock=? 
+    where
+        id_inventario_registro=?
+Hibernate: 
+    select
+        ir1_0.id_inventario_registro,
+        ir1_0.id_negocio,
+        ir1_0.precio_unitario,
+        ir1_0.id_producto,
+        ir1_0.recompensa_pdc,
+        ir1_0.stock 
+    from
+        inventario_registros ir1_0 
+    where
+        ir1_0.id_negocio=? 
+        and ir1_0.id_producto=?
+Hibernate: 
+    select
+        ir1_0.id_inventario_registro,
+        ir1_0.id_negocio,
+        ir1_0.precio_unitario,
+        ir1_0.id_producto,
+        ir1_0.recompensa_pdc,
+        ir1_0.stock 
+    from
+        inventario_registros ir1_0 
+    where
+        ir1_0.id_negocio=? 
+        and ir1_0.id_producto=?
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        inventario_registros
+        (id_negocio, precio_unitario, id_producto, recompensa_pdc, stock, id_inventario_registro) 
+    values
+        (?, ?, ?, ?, ?, default)
+Hibernate: 
+    update
+        inventario_registros 
+    set
+        id_negocio=?,
+        precio_unitario=?,
+        id_producto=?,
+        recompensa_pdc=?,
+        stock=? 
+    where
+        id_inventario_registro=?
+Hibernate: 
+    select
+        ir1_0.id_inventario_registro,
+        ir1_0.id_negocio,
+        ir1_0.precio_unitario,
+        ir1_0.id_producto,
+        ir1_0.recompensa_pdc,
+        ir1_0.stock 
+    from
+        inventario_registros ir1_0 
+    where
+        ir1_0.id_negocio=? 
+        and ir1_0.id_producto=?
+Hibernate: 
+    delete 
+    from
+        inventario_registros 
+    where
+        id_inventario_registro=?
+Hibernate: 
+    select
+        ir1_0.id_inventario_registro,
+        ir1_0.id_negocio,
+        ir1_0.precio_unitario,
+        ir1_0.id_producto,
+        ir1_0.recompensa_pdc,
+        ir1_0.stock 
+    from
+        inventario_registros ir1_0 
+    where
+        ir1_0.id_negocio=? 
+        and ir1_0.id_producto=?
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        inventario_registros
+        (id_negocio, precio_unitario, id_producto, recompensa_pdc, stock, id_inventario_registro) 
+    values
+        (?, ?, ?, ?, ?, default)
+Hibernate: 
+    update
+        inventario_registros 
+    set
+        id_negocio=?,
+        precio_unitario=?,
+        id_producto=?,
+        recompensa_pdc=?,
+        stock=? 
+    where
+        id_inventario_registro=?
+Hibernate: 
+    select
+        ir1_0.id_inventario_registro 
+    from
+        inventario_registros ir1_0 
+    where
+        ir1_0.id_negocio=? 
+        and ir1_0.id_producto=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        inventario_registros
+        (id_negocio, precio_unitario, id_producto, recompensa_pdc, stock, id_inventario_registro) 
+    values
+        (?, ?, ?, ?, ?, default)
+Hibernate: 
+    update
+        inventario_registros 
+    set
+        id_negocio=?,
+        precio_unitario=?,
+        id_producto=?,
+        recompensa_pdc=?,
+        stock=? 
+    where
+        id_inventario_registro=?
+Hibernate: 
+    select
+        ir1_0.id_inventario_registro 
+    from
+        inventario_registros ir1_0 
+    where
+        ir1_0.id_negocio=? 
+        and ir1_0.id_producto=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        inventario_registros
+        (id_negocio, precio_unitario, id_producto, recompensa_pdc, stock, id_inventario_registro) 
     values
         (?, ?, ?, ?, ?, default)
 Hibernate: 
     select
-        p1_0.id_pedido,
-        p1_0.id_cliente,
-        p1_0.estado,
-        p1_0.fecha_y_hora_entrega,
-        p1_0.id_negocio,
-        p1_0.precio_total 
+        p1_0.id_producto,
+        p1_0.nombre,
+        ir1_0.stock,
+        ir1_0.precio_unitario,
+        ir1_0.recompensa_pdc 
     from
-        pedidos p1_0
+        inventario_registros ir1_0 
+    join
+        productos p1_0 
+            on ir1_0.id_producto=p1_0.id_producto 
+    where
+        ir1_0.id_negocio=?
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        inventario_registros
+        (id_negocio, precio_unitario, id_producto, recompensa_pdc, stock, id_inventario_registro) 
+    values
+        (?, ?, ?, ?, ?, default)
+Hibernate: 
+    select
+        ir1_0.id_inventario_registro 
+    from
+        inventario_registros ir1_0 
+    where
+        ir1_0.id_negocio=? 
+        and ir1_0.id_producto=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        inventario_registros
+        (id_negocio, precio_unitario, id_producto, recompensa_pdc, stock, id_inventario_registro) 
+    values
+        (?, ?, ?, ?, ?, default)
+Hibernate: 
+    update
+        inventario_registros 
+    set
+        id_negocio=?,
+        precio_unitario=?,
+        id_producto=?,
+        recompensa_pdc=?,
+        stock=? 
+    where
+        id_inventario_registro=?
+Hibernate: 
+    select
+        ir1_0.id_inventario_registro,
+        ir1_0.id_negocio,
+        ir1_0.precio_unitario,
+        ir1_0.id_producto,
+        ir1_0.recompensa_pdc,
+        ir1_0.stock 
+    from
+        inventario_registros ir1_0 
+    where
+        ir1_0.id_negocio=? 
+        and ir1_0.id_producto=?
+Hibernate: 
+    select
+        ir1_0.id_inventario_registro,
+        ir1_0.id_negocio,
+        ir1_0.precio_unitario,
+        ir1_0.id_producto,
+        ir1_0.recompensa_pdc,
+        ir1_0.stock 
+    from
+        inventario_registros ir1_0 
+    where
+        ir1_0.id_negocio=? 
+        and ir1_0.id_producto=?
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        inventario_registros
+        (id_negocio, precio_unitario, id_producto, recompensa_pdc, stock, id_inventario_registro) 
+    values
+        (?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        inventario_registros
+        (id_negocio, precio_unitario, id_producto, recompensa_pdc, stock, id_inventario_registro) 
+    values
+        (?, ?, ?, ?, ?, default)
+Hibernate: 
+    update
+        inventario_registros 
+    set
+        id_negocio=?,
+        precio_unitario=?,
+        id_producto=?,
+        recompensa_pdc=?,
+        stock=? 
+    where
+        id_inventario_registro=?
+Hibernate: 
+    select
+        p1_0.id_producto,
+        p1_0.nombre,
+        ir1_0.stock,
+        ir1_0.precio_unitario,
+        ir1_0.recompensa_pdc 
+    from
+        inventario_registros ir1_0 
+    join
+        productos p1_0 
+            on ir1_0.id_producto=p1_0.id_producto 
+    where
+        ir1_0.id_negocio=?
 </pre>
 </span>
 </div>
@@ -1067,7 +1011,7 @@ Hibernate:
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 8.5</a> at 18 ene. 2024 13:17:36</p>
+<a href="http://www.gradle.org">Gradle 8.5</a> at 21 ene. 2024 23:32:32</p>
 </div>
 </div>
 </body>
