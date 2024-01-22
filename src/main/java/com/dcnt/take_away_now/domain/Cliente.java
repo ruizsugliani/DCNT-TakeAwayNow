@@ -9,6 +9,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -33,7 +34,7 @@ public class Cliente {
 
     @Column(name="PDC")
     @Convert(converter = PuntosDeConfianzaAttributeConverter.class)
-    private PuntosDeConfianza puntosDeConfianza;
+    private PuntosDeConfianza puntosDeConfianza= new PuntosDeConfianza((double) 0);
 
     @JsonBackReference
     @OneToMany(targetEntity = Pedido.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "cliente")

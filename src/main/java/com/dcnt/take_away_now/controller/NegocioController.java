@@ -65,7 +65,7 @@ public class NegocioController {
             @RequestParam String nombreDelProducto,
             @RequestParam Long stock,
             @RequestParam BigDecimal precio,
-            @RequestParam Integer recompensaPuntosDeConfianza
+            @RequestParam Double recompensaPuntosDeConfianza
     ) {
         return negocioService.crearProducto(negocioId, nombreDelProducto, new InventarioRegistroDto(stock, new Dinero(precio), new PuntosDeConfianza(recompensaPuntosDeConfianza)));
     }
@@ -78,7 +78,7 @@ public class NegocioController {
             @PathVariable Long productoId,
             @RequestParam Long stock,
             @RequestParam BigDecimal precio,
-            @RequestParam Integer recompensaPuntosDeConfianza
+            @RequestParam Double recompensaPuntosDeConfianza
     ) {
         return negocioService.modificarInventarioRegistro(negocioId, productoId, stock, precio, recompensaPuntosDeConfianza);
     }

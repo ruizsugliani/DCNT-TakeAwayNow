@@ -31,6 +31,9 @@ public class Pedido {
     @Column(name="FECHA_Y_HORA_ENTREGA")
     public LocalDateTime fechaYHoraDeEntrega;
 
+    @Column(name="CODIGO")
+    public String codigo;
+
     @JsonBackReference
     @OneToMany(targetEntity = ProductoPedido.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "pedido")
     private List<ProductoPedido> productosPedidos;

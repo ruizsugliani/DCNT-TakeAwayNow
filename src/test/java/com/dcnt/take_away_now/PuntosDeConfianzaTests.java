@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import com.dcnt.take_away_now.value_object.PuntosDeConfianza;
 import com.dcnt.take_away_now.value_object.converter.PuntosDeConfianzaAttributeConverter;
 
+import java.math.BigDecimal;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
@@ -11,18 +13,6 @@ class PuntosDeConfianzaTests {
 
     @Test
     void contextLoads() {
-    }
-
-    @Test
-    void crearPuntosDeConfianzaConCantidadNegativaLanzaError() {
-        // when: "se crean puntos con cantidad negativa"
-        assertThatThrownBy(
-                () -> new PuntosDeConfianza(-100)
-        )
-
-        // then: "se lanza error"
-        .isInstanceOf(IllegalStateException.class)
-        .hasMessageContaining("No se pueden crear Puntos de Confianza con una cantidad menor a cero.");
     }
 
     @Test
@@ -64,18 +54,15 @@ class PuntosDeConfianzaTests {
     }
 
     @Test
-    void restar150APuntosConCantidad100LanzaUnError() {
+    void restar150APuntosConCantidad100ElResultadoEsMenos50() {
         // given: "puntos de confianza con cantidad 100"
         PuntosDeConfianza puntos100 = new PuntosDeConfianza(100);
 
         // when: "al restarle 150"
-        assertThatThrownBy(
-                () -> puntos100.minus(150)
-        )
+        PuntosDeConfianza puntosResultantes = puntos100.minus(150);
 
         // then: "se lanza un error"
-        .isInstanceOf(IllegalStateException.class)
-        .hasMessageContaining("La cantidad de puntos de confianza tras una resta no puede ser negativa.");
+        assertThat(puntosResultantes.getCantidad()).isEqualTo(-50);
     }
 
     @Test
@@ -98,10 +85,10 @@ class PuntosDeConfianzaTests {
     @Test
     void alMultiplicarPuntosConCantidad100Por5ElResultadoEs500() {
         // given: "puntos de confianza con cantidad 100"
-        PuntosDeConfianza puntos100 = new PuntosDeConfianza(100);
+        PuntosDeConfianza puntos100 = new PuntosDeConfianza(100.0);
 
         // when: "al restarle 150"
-        PuntosDeConfianza puntosDeConfianzaResultantes = puntos100.multiply(5);
+        PuntosDeConfianza puntosDeConfianzaResultantes = puntos100.multiply(5.0);
 
         // then: "se obtiene una instancia de PuntosDeConfianza con cantidad igual a 500"
         assertThat(puntosDeConfianzaResultantes.getCantidad()).isEqualTo(500);
@@ -110,11 +97,11 @@ class PuntosDeConfianzaTests {
     @Test
     void conviertoDiezPuntosDeConfianzaEnInteger() {
         // given: "dado diez puntos de confianza"
-        PuntosDeConfianza diezPuntosDeConfianza = new PuntosDeConfianza(10);
+        PuntosDeConfianza diezPuntosDeConfianza = new PuntosDeConfianza(10.0);
         PuntosDeConfianzaAttributeConverter attributeConverter = new PuntosDeConfianzaAttributeConverter();
 
         // when: "al convertirlo a columna de la bd"
-        Integer cantidadResultante = attributeConverter.convertToDatabaseColumn(diezPuntosDeConfianza);
+        Double cantidadResultante = attributeConverter.convertToDatabaseColumn(diezPuntosDeConfianza);
 
         // then: "obtengo un Integer con val = 2"
         assertThat(cantidadResultante).isEqualTo(10);
@@ -127,7 +114,7 @@ class PuntosDeConfianzaTests {
         PuntosDeConfianzaAttributeConverter attributeConverter = new PuntosDeConfianzaAttributeConverter();
 
         // when: "al convertirlo a un value object"
-        PuntosDeConfianza diezPuntosDeConfianza = attributeConverter.convertToEntityAttribute(val);
+        PuntosDeConfianza diezPuntosDeConfianza = attributeConverter.convertToEntityAttribute(Double.valueOf(val));
 
         // then: "obtengo una instancia de PuntosDeConfianza con cantidad igual a 10"
         assertThat(diezPuntosDeConfianza.getClass()).isEqualTo(PuntosDeConfianza.class);

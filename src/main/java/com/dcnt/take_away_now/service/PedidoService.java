@@ -2,6 +2,8 @@ package com.dcnt.take_away_now.service;
 
 import com.dcnt.take_away_now.domain.*;
 import com.dcnt.take_away_now.dto.InfoPedidoDto;
+import com.dcnt.take_away_now.enums.EstadoDelPedido;
+import com.dcnt.take_away_now.generador.GeneradorDeCodigo;
 import com.dcnt.take_away_now.repository.*;
 import com.dcnt.take_away_now.value_object.Dinero;
 import com.dcnt.take_away_now.value_object.PuntosDeConfianza;
@@ -11,7 +13,12 @@ import org.apache.hc.core5.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 @AllArgsConstructor
@@ -60,7 +67,7 @@ public class PedidoService {
     public ResponseEntity<HttpStatus> confirmarPedido(InfoPedidoDto dto) {
         // Dado que ya hemos corroborado todos los datos, procedemos a confirmar el pedido.
         Dinero precioTotalDelPedido = new Dinero(0);
-        PuntosDeConfianza pdcTotalDelPedido = new PuntosDeConfianza(0);
+        PuntosDeConfianza pdcTotalDelPedido = new PuntosDeConfianza((double) 0);
         Negocio negocio = negocioRepository.findById(dto.getIdNegocio()).get();
         Cliente cliente = clienteRepository.findById(dto.getIdCliente()).get();
         Pedido pedido = new Pedido(negocio, cliente);
@@ -86,13 +93,14 @@ public class PedidoService {
             Dinero precioParcialPorProducto = new Dinero(cantidadPedida).multiply(inventarioRegistro.getPrecio());
             precioTotalDelPedido = precioTotalDelPedido.plus(precioParcialPorProducto);
 
-            PuntosDeConfianza pdcParcialesPorProducto = inventarioRegistro.getRecompensaPuntosDeConfianza().multiply(cantidadPedida);
+            PuntosDeConfianza pdcParcialesPorProducto = inventarioRegistro.getRecompensaPuntosDeConfianza().multiply(Double.valueOf(cantidadPedida));
             pdcTotalDelPedido = pdcTotalDelPedido.plus(pdcParcialesPorProducto);
         }
 
         // Actualizamos el saldo y los puntos de confianza del cliente.
         cliente.setSaldo(cliente.getSaldo().minus(precioTotalDelPedido));
-        //TODO VERIFICAR CONDICION
+
+        //TODO VERIFICAR CONDICION Y MOVER ESTA LOGICA AL RETIRAR EL PEDIDO
         if (cliente.getPuntosDeConfianza() != null) {
             cliente.setPuntosDeConfianza(cliente.getPuntosDeConfianza().plus(pdcTotalDelPedido));
         }
@@ -119,4 +127,102 @@ public class PedidoService {
     }
 
 
+    /********************************************************
+     *   Métodos referidos al cambio de estado de un pedido *
+     ********************************************************/
+
+    public ResponseEntity<HttpStatus> marcarComienzoDePreparacion(Long idPedido) {
+        Pedido pedido = pedidoRepository.findById(idPedido).orElseThrow( () -> new RuntimeException("No existe el pedido al cual usted quiere marcar su comienzo de preparación."));
+        if (pedido.estado != EstadoDelPedido.AGUARDANDO_PREPARACION) {
+            throw new IllegalStateException("No se puede comenzar a preparar dicho pedido ya que el mismo no se encuentra aguardando preparación.");
+        }
+        pedido.setEstado(EstadoDelPedido.EN_PREPARACION);
+        pedidoRepository.save(pedido);
+        return ResponseEntity.accepted().build();
+    }
+
+    public ResponseEntity<HttpStatus> marcarPedidoListoParaRetirar(Long idPedido) {
+        Pedido pedido = pedidoRepository.findById(idPedido).orElseThrow( () -> new RuntimeException("No existe el pedido al cual usted quiere marcar como disponible su retiro."));
+        if (pedido.estado != EstadoDelPedido.EN_PREPARACION) {
+            throw new IllegalStateException("No se puede marcar dicho pedido como lista para retirar ya que el mismo no se encuentra en preparación.");
+        }
+        pedido.setEstado(EstadoDelPedido.LISTO_PARA_RETIRAR);
+        pedidoRepository.save(pedido);
+        return ResponseEntity.accepted().build();
+    }
+
+    public ResponseEntity<HttpStatus> confirmarRetiroDelPedido(Long idPedido) {
+        Pedido pedido = pedidoRepository.findById(idPedido).orElseThrow( () -> new RuntimeException("No existe el pedido al cual usted quiere confirmar el retiro."));
+        if (pedido.estado != EstadoDelPedido.LISTO_PARA_RETIRAR) {
+            throw new IllegalStateException("No se puede retirar dicho pedido ya que el mismo no se encuentra listo para retirar.");
+        }
+
+        // TODO El cliente obtiene los PDC en función de los productos que estén en el pedido.
+
+        // Actualizamos el estado del pedido y se establece la fecha y hora de entrega.
+        pedido.setFechaYHoraDeEntrega(LocalDateTime.now());
+        pedido.setEstado(EstadoDelPedido.RETIRADO);
+        pedido.setCodigo(GeneradorDeCodigo.generarCodigoAleatorio());
+        pedidoRepository.save(pedido);
+        return ResponseEntity.accepted().build();
+    }
+
+    public ResponseEntity<HttpStatus> cancelarPedido(Long idPedido) {
+        Pedido pedido = pedidoRepository.findById(idPedido).orElseThrow( () -> new RuntimeException("No existe el pedido que usted busca cancelar."));
+        List<EstadoDelPedido> estadosPosibles = Arrays.asList(EstadoDelPedido.AGUARDANDO_PREPARACION, EstadoDelPedido.EN_PREPARACION, EstadoDelPedido.LISTO_PARA_RETIRAR);
+        if (!estadosPosibles.contains(pedido.estado)) {
+            throw new IllegalStateException("No se puede retirar dicho pedido ya que el mismo no se encuentra aguardando preparación, en preparación ni listo para retirar.");
+        }
+
+        Cliente c = clienteRepository.findById(pedido.getCliente().getId()).orElseThrow( () -> new RuntimeException("Ocurrió un error al obtener los datos del cliente."));
+
+        // TODO En caso de que el estado sea AGUARDANDO_PREPARACION, entonces el cliente pierde puntos de confianza (levemente, podría ser un 5% del total que posee) pero recupera su dinero.
+        if (pedido.getEstado() == EstadoDelPedido.AGUARDANDO_PREPARACION) {
+            c.setPuntosDeConfianza(c.getPuntosDeConfianza().minus(c.getPuntosDeConfianza().multiply(0.05)));
+            c.setSaldo(c.getSaldo().plus(pedido.getPrecioTotal()));
+        }
+
+        // TODO En caso de que el estado sea EN_PREPARACION, entonces el cliente pierde puntos de confianza (notablemente, podría ser un 20% del total que posee), no recupera su dinero.
+        if (pedido.getEstado() == EstadoDelPedido.EN_PREPARACION) {
+            c.setPuntosDeConfianza(
+                    c.getPuntosDeConfianza().minus(c.getPuntosDeConfianza().multiply(0.20)));
+        }
+
+        // TODO En caso de que el estado sea LISTO_PARA_RETIRAR, entonces el cliente pierde puntos de confianza (significativamente, pierde un 100% del total que posee), no recupera su dinero.
+        if (pedido.getEstado() == EstadoDelPedido.LISTO_PARA_RETIRAR) {
+            c.setPuntosDeConfianza(new PuntosDeConfianza((double) 0));
+        }
+
+        clienteRepository.save(c);
+
+        // TODO se actualiza el stock de cada producto
+
+        // Actualizamos el estado del pedido.
+        pedido.setEstado(EstadoDelPedido.CANCELADO);
+        pedidoRepository.save(pedido);
+        return ResponseEntity.accepted().build();
+    }
+
+    public ResponseEntity<HttpStatus> devolverPedido(Long idPedido) {
+        Pedido pedido = pedidoRepository.findById(idPedido).orElseThrow( () -> new RuntimeException("No existe el pedido que usted busca devolver."));
+        if (pedido.estado != EstadoDelPedido.RETIRADO) {
+            throw new IllegalStateException("No se puede devolver dicho pedido ya que el mismo no se encontraba retirado.");
+        }
+
+        // Verificamos si pasaron menos de 5 minutos desde su entrega.
+        if (Duration.between(pedido.getFechaYHoraDeEntrega(), LocalDateTime.now()).toMinutes() > 5) {
+            throw new IllegalStateException("El tiempo de tolerancia para devolver un pedido es de cinco minutos y el mismo ya ha expirado.");
+        }
+
+        // El cliente obtiene su dinero nuevamente.
+        Cliente c = clienteRepository.findById(pedido.getCliente().getId()).orElseThrow( () -> new RuntimeException("Ocurrió un error al reintegrar el total del pedido al cliente."));
+        c.setSaldo(c.getSaldo().plus(pedido.getPrecioTotal()));
+
+        // TODO se actualiza el stock de cada producto
+
+        // Actualizamos el estado del pedido.
+        pedido.setEstado(EstadoDelPedido.DEVUELTO);
+        pedidoRepository.save(pedido);
+        return ResponseEntity.accepted().build();
+    }
 }

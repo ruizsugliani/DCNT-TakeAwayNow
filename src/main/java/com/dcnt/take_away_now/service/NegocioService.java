@@ -139,7 +139,7 @@ public class NegocioService {
             Long productoId,
             Long stock,
             BigDecimal precio,
-            Integer recompensaPuntosDeConfianza
+            Double recompensaPuntosDeConfianza
     ) {
         // Corroboramos la existencia del negocio.
         Optional<Negocio> optionalNegocio = negocioRepository.findById(negocioId);
@@ -209,65 +209,8 @@ public class NegocioService {
         return ResponseEntity.accepted().build();
     }
 
-    @SuppressWarnings("OptionalGetWithoutIsPresent")
-    public ResponseEntity<HttpStatus> marcarComienzoDePreparacion(Long idPedido) {
-        if (!pedidoRepository.existsPedidoById(idPedido)) {
-            throw new NoSuchElementException("No existe el pedido al cual usted solicitó cambiar su estado.");
-        }
-        Pedido pedido = pedidoRepository.findById(idPedido).get();
-        if (pedido.estado != EstadoDelPedido.AGUARDANDO_PREPARACION) {
-            throw new IllegalStateException("No se puede comenzar a preparar dicho pedido ya que el mismo no se encuentra aguardando preparación.");
-        }
-        pedido.setEstado(EstadoDelPedido.EN_PREPARACION);
-        pedidoRepository.save(pedido);
-        return ResponseEntity.accepted().build();
-    }
-
-    public ResponseEntity<HttpStatus> marcarPedidoListoParaRetirar(Long idPedido) {
-        if (!pedidoRepository.existsPedidoById(idPedido)) {
-            throw new NoSuchElementException("No existe el pedido al cual usted solicitó cambiar su estado.");
-        }
-        Pedido pedido = pedidoRepository.findById(idPedido).get();
-        if (pedido.estado != EstadoDelPedido.EN_PREPARACION) {
-            throw new IllegalStateException("No se puede marcar dicho pedido como lista para retirar ya que el mismo no se encuentra en preparación.");
-        }
-        pedido.setEstado(EstadoDelPedido.LISTO_PARA_RETIRAR);
-        pedidoRepository.save(pedido);
-        return ResponseEntity.accepted().build();
-    }
-
-    public ResponseEntity<HttpStatus> marcarPedidoRetirado(Long idPedido) {
-        Pedido pedido = pedidoRepository.findById(idPedido).orElseThrow( () -> new RuntimeException("No existe el pedido al cual usted quiere confirmar el retiro."));
-        if (pedido.estado != EstadoDelPedido.LISTO_PARA_RETIRAR) {
-            throw new IllegalStateException("No se puede retirar dicho pedido ya que el mismo no se encuentra listo para retirar.");
-        }
-        pedido.setEstado(EstadoDelPedido.RETIRADO);
-        pedidoRepository.save(pedido);
-        return ResponseEntity.accepted().build();
-    }
-
-    public ResponseEntity<HttpStatus> marcarPedidoCancelado(Long idPedido) {
-        Pedido pedido = pedidoRepository.findById(idPedido).orElseThrow( () -> new RuntimeException("No existe el pedido que usted busca cancelar."));
-        if (pedido.estado != EstadoDelPedido.RETIRADO) {
-            throw new IllegalStateException("No se puede cancelar dicho pedido ya que el mismo no se encontraba retirado.");
-        }
-        pedido.setEstado(EstadoDelPedido.CANCELADO);
-        pedidoRepository.save(pedido);
-        return ResponseEntity.accepted().build();
-    }
-
-    public ResponseEntity<HttpStatus> marcarPedidoDevuelto(Long idPedido) {
-        Pedido pedido = pedidoRepository.findById(idPedido).orElseThrow( () -> new RuntimeException("No existe el pedido que usted busca devolver."));
-        if (pedido.estado != EstadoDelPedido.RETIRADO) {
-            throw new IllegalStateException("No se puede devolver dicho pedido ya que el mismo no se encontraba retirado.");
-        }
-        pedido.setEstado(EstadoDelPedido.DEVUELTO);
-        pedidoRepository.save(pedido);
-        return ResponseEntity.accepted().build();
-    }
-
     public Collection<PedidoDto> obtenerPedidos(Long idNegocio) {
-        // Corroboramos la existencia del cliente
+        // Corroboramos la existencia del negocio
         negocioRepository.findById(idNegocio).orElseThrow( () -> new RuntimeException("No existe el negocio en la base de datos.") );
 
         return pedidoRepository.obtenerPedidosDelNegocio(idNegocio);

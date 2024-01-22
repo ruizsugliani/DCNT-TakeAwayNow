@@ -3,25 +3,19 @@ package com.dcnt.take_away_now.value_object;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @NoArgsConstructor
-public class PuntosDeConfianza implements Comparable<PuntosDeConfianza> {
-    public int cantidad;
+public class PuntosDeConfianza {
+    public Double cantidad;
 
-    public int toInt() {
-        return this.getCantidad();
-    }
     public PuntosDeConfianza(int cantidadInicial) {
-        if (cantidadInicial < 0) {
-            throw new IllegalStateException("No se pueden crear Puntos de Confianza con una cantidad menor a cero.");
-        }
-        this.cantidad = cantidadInicial;
+        this.cantidad = (double) cantidadInicial;
     }
-    /**
-     * Compara la cantidad actual con la cantidad de puntos de confianza recibidos
-     */
-    public int compareTo(PuntosDeConfianza otro) {
-        return Integer.compare(this.getCantidad(), otro.getCantidad());
+
+    public PuntosDeConfianza(Double cantidadInicial) {
+        this.cantidad = cantidadInicial;
     }
 
     /**
@@ -31,6 +25,13 @@ public class PuntosDeConfianza implements Comparable<PuntosDeConfianza> {
      * indicada es negativa se lanza un error.
      *
      */
+    public PuntosDeConfianza plus(Double cantidad) {
+        if (cantidad <= 0) {
+            throw new IllegalStateException("La cantidad a agregar no puede ser negativa o cero");
+        }
+        return new PuntosDeConfianza(this.cantidad + cantidad);
+    }
+
     public PuntosDeConfianza plus(int cantidad) {
         if (cantidad <= 0) {
             throw new IllegalStateException("La cantidad a agregar no puede ser negativa o cero");
@@ -45,12 +46,16 @@ public class PuntosDeConfianza implements Comparable<PuntosDeConfianza> {
      * Si resta da menor a cero se lanza un error.
      * Si la cantidad indicada por parametro es negativa se lanza un error.
      */
-    public PuntosDeConfianza minus(int cantidadPorRestar) {
+    public PuntosDeConfianza minus(Double cantidadPorRestar) {
         if (cantidadPorRestar < 0) {
             throw new IllegalStateException("La cantidad de puntos de confianza a restar no puede ser negativa.");
         }
-        if (this.cantidad - cantidadPorRestar < 0) {
-            throw new IllegalStateException("La cantidad de puntos de confianza tras una resta no puede ser negativa.");
+        return new PuntosDeConfianza(this.cantidad - cantidadPorRestar);
+    }
+
+    public PuntosDeConfianza minus(int cantidadPorRestar) {
+        if (cantidadPorRestar < 0) {
+            throw new IllegalStateException("La cantidad de puntos de confianza a restar no puede ser negativa.");
         }
         return new PuntosDeConfianza(this.cantidad - cantidadPorRestar);
     }
@@ -73,12 +78,6 @@ public class PuntosDeConfianza implements Comparable<PuntosDeConfianza> {
      * Si la cantidad indicada por parametro es negativa se lanza un error.
      */
     public PuntosDeConfianza minus(PuntosDeConfianza puntosPorRestar) {
-        if (puntosPorRestar.getCantidad() < 0) {
-            throw new IllegalStateException("La cantidad de puntos de confianza a restar no puede ser negativa.");
-        }
-        if (this.getCantidad() - puntosPorRestar.getCantidad() < 0) {
-            throw new IllegalStateException("La cantidad de puntos de confianza tras una resta no puede ser negativa.");
-        }
         return new PuntosDeConfianza(this.getCantidad() - puntosPorRestar.getCantidad());
     }
 
@@ -88,14 +87,14 @@ public class PuntosDeConfianza implements Comparable<PuntosDeConfianza> {
      * Retorna una instancia de PuntosDeConfianza con la cantidad resultante.
      * Si esta cantidad indicada por parámetro es negativa se lanza un error.
      */
-    public PuntosDeConfianza multiply(int cantidad) {
+    public PuntosDeConfianza multiply(Double cantidad) {
         if (cantidad < 0) {
             throw new IllegalStateException("No se pueden multiplicar puntos de confianza por números menores a cero.");
         }
         return new PuntosDeConfianza(this.cantidad * cantidad);
     }
 
-    public PuntosDeConfianza multiply(Integer cantidad) {
+    public PuntosDeConfianza multiply(int cantidad) {
         if (cantidad < 0) {
             throw new IllegalStateException("No se pueden multiplicar puntos de confianza por números menores a cero.");
         }

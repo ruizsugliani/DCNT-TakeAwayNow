@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.dcnt.take_away_now.repository.NegocioRepositoryTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2024-01-22T02:32:30" hostname="DESKTOP-FB7HCB6" time="0.024">
+<testsuite name="com.dcnt.take_away_now.repository.NegocioRepositoryTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2024-01-22T23:31:38" hostname="DESKTOP-FB7HCB6" time="0.031">
   <properties/>
-  <testcase name="SeEncuentraUnNegocioQueExiste()" classname="com.dcnt.take_away_now.repository.NegocioRepositoryTest" time="0.012"/>
-  <testcase name="NoSeEncuentraUnNegocioQueNoExiste()" classname="com.dcnt.take_away_now.repository.NegocioRepositoryTest" time="0.01"/>
-  <system-out><![CDATA[2024-01-21T23:32:30.549-03:00  INFO 2188 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.dcnt.take_away_now.repository.NegocioRepositoryTest]: NegocioRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2024-01-21T23:32:30.586-03:00  INFO 2188 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.dcnt.take_away_now.TakeAwayNowApplication for test class com.dcnt.take_away_now.repository.NegocioRepositoryTest
+  <testcase name="SeEncuentraUnNegocioQueExiste()" classname="com.dcnt.take_away_now.repository.NegocioRepositoryTest" time="0.011"/>
+  <testcase name="NoSeEncuentraUnNegocioQueNoExiste()" classname="com.dcnt.take_away_now.repository.NegocioRepositoryTest" time="0.019"/>
+  <system-out><![CDATA[2024-01-22T20:31:38.794-03:00  INFO 16824 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.dcnt.take_away_now.repository.NegocioRepositoryTest]: NegocioRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2024-01-22T20:31:38.845-03:00  INFO 16824 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.dcnt.take_away_now.TakeAwayNowApplication for test class com.dcnt.take_away_now.repository.NegocioRepositoryTest
 Hibernate: 
     insert 
     into

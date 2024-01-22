@@ -6,15 +6,15 @@ import com.dcnt.take_away_now.value_object.PuntosDeConfianza;
 
 
 @Converter
-public class PuntosDeConfianzaAttributeConverter implements AttributeConverter<PuntosDeConfianza, Integer> {
+public class PuntosDeConfianzaAttributeConverter implements AttributeConverter<PuntosDeConfianza, Double> {
 
     @Override
-    public Integer convertToDatabaseColumn(PuntosDeConfianza attribute) {
-        return attribute == null ? null : attribute.toInt();
+    public Double convertToDatabaseColumn(PuntosDeConfianza attribute) {
+        return attribute == null ? null : attribute.getCantidad();
     }
 
     @Override
-    public PuntosDeConfianza convertToEntityAttribute(Integer dbData) {
+    public PuntosDeConfianza convertToEntityAttribute(Double dbData) {
         return dbData == null ? null : new PuntosDeConfianza(dbData);
     }
 }
