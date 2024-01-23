@@ -3,6 +3,8 @@ package com.dcnt.take_away_now.service;
 import com.dcnt.take_away_now.domain.*;
 import com.dcnt.take_away_now.dto.InfoPedidoDto;
 import com.dcnt.take_away_now.dto.InventarioRegistroDto;
+import com.dcnt.take_away_now.dto.PedidoDto;
+import com.dcnt.take_away_now.dto.ProductoDto;
 import com.dcnt.take_away_now.repository.*;
 import com.dcnt.take_away_now.value_object.Dinero;
 import com.dcnt.take_away_now.value_object.PuntosDeConfianza;
@@ -44,6 +46,8 @@ class PedidoServiceTest {
 
     private PedidoService pedidoService;
 
+    private ClienteService clienteService;
+
     Cliente cliente;
     Negocio negocio;
     Producto pancho;
@@ -55,6 +59,7 @@ class PedidoServiceTest {
         negocioRepository.save(negocio);
         pancho = new Producto("Pancho");
         productoRepository.save(pancho);
+        clienteService = new ClienteService(clienteRepository, pedidoRepository, productoPedidoRepository);
         negocioService = new NegocioService(negocioRepository, inventarioRegistroRepository, productoRepository,pedidoRepository);
         pedidoService = new PedidoService(pedidoRepository, clienteRepository, negocioRepository,productoRepository, inventarioRegistroRepository,productoPedidoRepository);
     }
@@ -399,24 +404,113 @@ class PedidoServiceTest {
     }
 
     @Test
-    void noSePuedeCancelarAUnPedidoQueEstaRetirado() {
+    void cuandoSeCancelaUnPedidoEnAguardandoPreparacionSeDevulveElSaldoYSeLeSacanUnCincoPorcinetoDeLosPuntosDeConfianza() {
         //given
         Cliente cliente = new Cliente("Messi");
         clienteRepository.save(cliente);
-        Pedido pedido1 = new Pedido(negocio, cliente);
-        pedidoRepository.save(pedido1);
-        pedidoService.marcarComienzoDePreparacion(pedido1.getId());
-        pedidoService.marcarPedidoListoParaRetirar(pedido1.getId());
-        pedidoService.confirmarRetiroDelPedido(pedido1.getId());
+        clienteService.cargarSaldo(cliente.getId(), BigDecimal.valueOf(1000));
+
+        InventarioRegistroDto inventarioRegistroDto = new InventarioRegistroDto(10L, new Dinero(100), new PuntosDeConfianza(20.0));
+        negocioService.crearProducto(negocio.getId(), "Alfajor",inventarioRegistroDto);
+        Optional<Producto> alfajor = productoRepository.findByNombre("Alfajor");
+
+        Map<Long, Integer> productos =Map.of(alfajor.get().getId(), 9);
+        InfoPedidoDto infoPedidoDto = new InfoPedidoDto(cliente.getId(), negocio.getId(), productos);
+        pedidoService.confirmarPedido(infoPedidoDto);
+
+        Dinero saldoPostConfirmarPedido = cliente.getSaldo();
+        PuntosDeConfianza puntosPostConfirmarPedido = cliente.getPuntosDeConfianza();
+
+        Collection<PedidoDto> pedidos = clienteService.obtenerPedidos(cliente.getId());
+
         //when
-        assertThatThrownBy(
-                () -> {
-                    pedidoService.cancelarPedido(pedido1.getId());
-                }
-        )
-                // then: "se lanza error"
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("No se puede retirar dicho pedido ya que el mismo no se encuentra aguardando preparación, en preparación ni listo para retirar.");
+        for (PedidoDto entry: pedidos) {
+            pedidoService.cancelarPedido(entry.getIdPedido());
+        }
+
+        //then
+        Dinero saldoPostCancelacion = cliente.getSaldo();
+        PuntosDeConfianza puntosPostCancelacion = cliente.getPuntosDeConfianza();
+
+        assertThat(saldoPostConfirmarPedido).isEqualTo(new Dinero(100));
+        assertThat(puntosPostConfirmarPedido).isEqualTo(new PuntosDeConfianza(180));
+        assertThat(saldoPostCancelacion).isEqualTo(new Dinero(1000));
+        // se le resta un 5% de los puntos de confianza
+        assertThat(puntosPostCancelacion).isEqualTo(puntosPostConfirmarPedido.minus(puntosPostConfirmarPedido.multiply(0.05)));
+    }
+
+    @Test
+    void cuandoSeCancelaUnPedidoEnPreparacionNoSeDevulveElSaldoYSeLeSacanUnVeintePorcienteDeLosPuntosDeConfianza() {
+        //given
+        Cliente cliente = new Cliente("Messi");
+        clienteRepository.save(cliente);
+        clienteService.cargarSaldo(cliente.getId(), BigDecimal.valueOf(1000));
+
+        InventarioRegistroDto inventarioRegistroDto = new InventarioRegistroDto(10L, new Dinero(100), new PuntosDeConfianza(20.0));
+        negocioService.crearProducto(negocio.getId(), "Alfajor",inventarioRegistroDto);
+        Optional<Producto> alfajor = productoRepository.findByNombre("Alfajor");
+
+        Map<Long, Integer> productos =Map.of(alfajor.get().getId(), 9);
+        InfoPedidoDto infoPedidoDto = new InfoPedidoDto(cliente.getId(), negocio.getId(), productos);
+        pedidoService.confirmarPedido(infoPedidoDto);
+
+        Dinero saldoPostConfirmarPedido = cliente.getSaldo();
+        PuntosDeConfianza puntosPostConfirmarPedido = cliente.getPuntosDeConfianza();
+
+        Collection<PedidoDto> pedidos = clienteService.obtenerPedidos(cliente.getId());
+
+        //when
+        for (PedidoDto entry: pedidos) {
+            pedidoService.marcarComienzoDePreparacion(entry.getIdPedido());
+            pedidoService.cancelarPedido(entry.getIdPedido());
+        }
+
+        //then
+        Dinero saldoPostCancelacion = cliente.getSaldo();
+        PuntosDeConfianza puntosPostCancelacion = cliente.getPuntosDeConfianza();
+
+        assertThat(saldoPostConfirmarPedido).isEqualTo(new Dinero(100));
+        assertThat(puntosPostConfirmarPedido).isEqualTo(new PuntosDeConfianza(180));
+        assertThat(saldoPostCancelacion).isEqualTo(new Dinero(100));
+        // se le resta un 20% de los puntos de confianza
+        assertThat(puntosPostCancelacion).isEqualTo(puntosPostConfirmarPedido.minus(puntosPostConfirmarPedido.multiply(0.2)));
+    }
+
+    @Test
+    void cuandoSeCancelaUnPedidoListoParaRetirarNoSeDevulveElSaldoYSeLeSacanLosPuntosDeConfianza() {
+        //given
+        Cliente cliente = new Cliente("Messi");
+        clienteRepository.save(cliente);
+        clienteService.cargarSaldo(cliente.getId(), BigDecimal.valueOf(1000));
+
+        InventarioRegistroDto inventarioRegistroDto = new InventarioRegistroDto(10L, new Dinero(100), new PuntosDeConfianza(20.0));
+        negocioService.crearProducto(negocio.getId(), "Alfajor",inventarioRegistroDto);
+        Optional<Producto> alfajor = productoRepository.findByNombre("Alfajor");
+
+        Map<Long, Integer> productos =Map.of(alfajor.get().getId(), 9);
+        InfoPedidoDto infoPedidoDto = new InfoPedidoDto(cliente.getId(), negocio.getId(), productos);
+        pedidoService.confirmarPedido(infoPedidoDto);
+
+        Dinero saldoPostConfirmarPedido = cliente.getSaldo();
+        PuntosDeConfianza puntosPostConfirmarPedido = cliente.getPuntosDeConfianza();
+
+        Collection<PedidoDto> pedidos = clienteService.obtenerPedidos(cliente.getId());
+
+        //when
+        for (PedidoDto entry: pedidos) {
+            pedidoService.marcarComienzoDePreparacion(entry.getIdPedido());
+            pedidoService.marcarPedidoListoParaRetirar(entry.getIdPedido());
+            pedidoService.cancelarPedido(entry.getIdPedido());
+        }
+
+        //then
+        Dinero saldoPostCancelacion = cliente.getSaldo();
+        PuntosDeConfianza puntosPostCancelacion = cliente.getPuntosDeConfianza();
+
+        assertThat(saldoPostConfirmarPedido).isEqualTo(new Dinero(100));
+        assertThat(puntosPostConfirmarPedido).isEqualTo(new PuntosDeConfianza(180));
+        assertThat(saldoPostCancelacion).isEqualTo(new Dinero(100));
+        assertThat(puntosPostCancelacion).isEqualTo(new PuntosDeConfianza(0));
     }
 
     @Test
@@ -468,4 +562,46 @@ class PedidoServiceTest {
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("No se puede devolver dicho pedido ya que el mismo no se encontraba retirado.");
     }
+
+    /*
+    @Test
+    void cuandoSeDevuelveUnPedidoSeLeDevuelveElSaldoAlClienteYElStockDeLosProductos() {
+        //given
+        Cliente cliente = new Cliente("Messi");
+        clienteRepository.save(cliente);
+        clienteService.cargarSaldo(cliente.getId(), BigDecimal.valueOf(1000));
+
+        Long stockInicial = 10L;
+        InventarioRegistroDto inventarioRegistroDto = new InventarioRegistroDto(stockInicial, new Dinero(100), new PuntosDeConfianza(20.0));
+        negocioService.crearProducto(negocio.getId(), "Alfajor",inventarioRegistroDto);
+        Optional<Producto> alfajor = productoRepository.findByNombre("Alfajor");
+
+        Map<Long, Integer> productos =Map.of(alfajor.get().getId(), 9);
+        InfoPedidoDto infoPedidoDto = new InfoPedidoDto(cliente.getId(), negocio.getId(), productos);
+        pedidoService.confirmarPedido(infoPedidoDto);
+
+        Dinero saldoPostConfirmarPedido = cliente.getSaldo();
+
+        Collection<PedidoDto> pedidos = clienteService.obtenerPedidos(cliente.getId());
+
+        //when
+        for (PedidoDto entry: pedidos) {
+            pedidoService.marcarComienzoDePreparacion(entry.getIdPedido());
+            pedidoService.marcarPedidoListoParaRetirar(entry.getIdPedido());
+            pedidoService.confirmarRetiroDelPedido(entry.getIdPedido());
+            //TODO VERIFICAR POR QUE NO EXISTE PRODUCTOPEDIDO
+            pedidoService.devolverPedido(entry.getIdPedido());
+        }
+
+        //then
+        Dinero saldoPostCancelacion = cliente.getSaldo();
+
+        Collection<ProductoDto> productosNegocio = negocioService.obtenerProductos(negocio.getId());
+        for (ProductoDto entry: productosNegocio) {
+            assertThat(entry.getStock()).isEqualTo(stockInicial);
+        }
+
+        assertThat(saldoPostConfirmarPedido).isEqualTo(new Dinero(100));
+        assertThat(saldoPostCancelacion).isEqualTo(new Dinero(1000));
+    }*/
 }

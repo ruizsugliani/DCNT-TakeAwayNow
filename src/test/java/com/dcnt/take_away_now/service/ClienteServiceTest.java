@@ -1,9 +1,11 @@
 package com.dcnt.take_away_now.service;
 
 import com.dcnt.take_away_now.domain.Cliente;
+import com.dcnt.take_away_now.domain.Pedido;
 import com.dcnt.take_away_now.repository.ClienteRepository;
 import com.dcnt.take_away_now.repository.PedidoRepository;
 import com.dcnt.take_away_now.repository.ProductoPedidoRepository;
+import com.dcnt.take_away_now.value_object.Dinero;
 import org.apache.hc.core5.http.HttpStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.http.ResponseEntity;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -95,5 +98,33 @@ class ClienteServiceTest {
         //then
         boolean found = clienteRepository.findByUsuario(username).isPresent();
         assertThat(found).isFalse();
+    }
+
+    @Test
+    void sePuedeCargarSaldoAUnCliente() {
+        //given
+        clienteService.crearCliente(username);
+        Optional<Cliente> messi = clienteRepository.findByUsuario(username);
+
+        //when
+        clienteService.cargarSaldo(messi.get().getId(), BigDecimal.valueOf(100));
+
+        //then
+        Dinero saldo = messi.get().getSaldo();
+        assertThat(saldo).isEqualTo(new Dinero(100));
+    }
+
+    @Test
+    void noSePuedeCargarSaldoAUnClienteQueNoExiste() {
+        //when
+        assertThatThrownBy(
+                () -> {
+                    clienteService.cargarSaldo(1L, BigDecimal.valueOf(100));
+
+                }
+        )
+                // then: "se lanza error"
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("No existe el cliente en la base de datos.");
     }
 }

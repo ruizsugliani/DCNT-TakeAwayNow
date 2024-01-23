@@ -16,10 +16,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @AllArgsConstructor
 @Service
@@ -230,9 +227,7 @@ public class PedidoService {
         //Se actualiza el stock de cada producto
         for (ProductoPedido entry : pedido.getProductosPedidos()) {
             Integer cantidadPedida = entry.getCantidad();
-            Producto producto = productoRepository.findById(entry.getId()).get();
-
-            InventarioRegistro inventarioRegistro = inventarioRegistroRepository.findByNegocioAndProducto(negocio, producto).orElseThrow( () -> new RuntimeException("Ocurrió un error con el producto "+ producto.getNombre() +" al confirmar el pedido.") );
+            InventarioRegistro inventarioRegistro = inventarioRegistroRepository.findByNegocioAndProducto(negocio, entry.getProducto()).orElseThrow( () -> new RuntimeException("Ocurrió un error con el producto "+ entry.getProducto().getNombre() +" al confirmar el pedido.") );
 
             inventarioRegistro.setStock(inventarioRegistro.getStock() + cantidadPedida);
 
