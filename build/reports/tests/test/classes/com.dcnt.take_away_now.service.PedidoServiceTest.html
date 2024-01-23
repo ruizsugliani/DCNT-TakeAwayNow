@@ -23,7 +23,7 @@
 <tr>
 <td>
 <div class="infoBox" id="tests">
-<div class="counter">10</div>
+<div class="counter">25</div>
 <p>tests</p>
 </div>
 </td>
@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.292s</div>
+<div class="counter">0.542s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,52 +79,127 @@
 </thead>
 <tr>
 <td class="success">esUnProductoDeEseNegocio()</td>
-<td class="success">0.021s</td>
+<td class="success">0.029s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">noEsUnProductoDeEseNegocio()</td>
+<td class="success">0.015s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">noSePuedeCancelarAUnPedidoQueEstaRetirado()</td>
 <td class="success">0.012s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
+<td class="success">noSePuedeCancelarAUnPedidoQueNoExiste()</td>
+<td class="success">0.020s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">noSePuedeConfirmarRetiroAUnPedidoQueNoEstaListoParaRetirar()</td>
+<td class="success">0.027s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">noSePuedeConfirmarRetiroAUnPedidoQueNoExiste()</td>
+<td class="success">0.010s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
 <td class="success">noSePuedeConfirmarUnPedidoParaEstosProductosPorqueNoEsUnProductoDelNegocio()</td>
-<td class="success">0.023s</td>
+<td class="success">0.022s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">noSePuedeConfirmarUnPedidoParaEstosProductosPorqueNoHayStockSuficiente()</td>
-<td class="success">0.036s</td>
+<td class="success">0.032s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">noSePuedeMarcarComienzoDePreparacionAUnPedidoQueNoEstaEnAguardandoPreparacion()</td>
+<td class="success">0.040s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">noSePuedeMarcarComienzoDePreparacionAUnPedidoQueNoExiste()</td>
+<td class="success">0.009s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">noSePuedeMarcarListoParaRetirarAUnPedidoQueNoEstaEnPreparacion()</td>
+<td class="success">0.015s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">noSePuedeMarcarListoParaRetirarAUnPedidoQueNoExiste()</td>
+<td class="success">0.010s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">noSePuedeMarcarPedidoDevueltoAUnPedidoQueNoEstaRetirado()</td>
+<td class="success">0.008s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">noSePuedeMarcarPedidoDevueltoAUnPedidoQueNoExiste()</td>
+<td class="success">0.017s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">obtenerPedidos()</td>
-<td class="success">0.018s</td>
+<td class="success">0.010s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">sePuedeCancelarAUnPedidoQueEstaAguardandoPreparacion()</td>
+<td class="success">0.009s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">sePuedeConfirmarPedido()</td>
-<td class="success">0.033s</td>
+<td class="success">0.022s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">sePuedeConfirmarRetiroAUnPedidoQueEstaListoParaRetirar()</td>
+<td class="success">0.026s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">sePuedeConfirmarUnPedidoParaEstosProductos()</td>
-<td class="success">0.060s</td>
+<td class="success">0.053s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">sePuedeMarcarComienzoDePreparacionAUnPedidoQueEstaAguardandoPreparacion()</td>
+<td class="success">0.012s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">sePuedeMarcarListoParaRetirarAUnPedidoQueEstaEnPreparacion()</td>
+<td class="success">0.016s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">sePuedeMarcarPedidoDevueltoAUnPedidoQueEstaRetirado()</td>
+<td class="success">0.014s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">verificarPedido()</td>
-<td class="success">0.045s</td>
+<td class="success">0.040s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">verificarPedidoLanzaQueNoExisteCliente()</td>
-<td class="success">0.022s</td>
+<td class="success">0.020s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">verificarPedidoLanzaQueNoExisteNegocio()</td>
-<td class="success">0.022s</td>
+<td class="success">0.054s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -132,8 +207,127 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>2024-01-22T20:31:40.478-03:00  INFO 16824 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.dcnt.take_away_now.service.PedidoServiceTest]: PedidoServiceTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2024-01-22T20:31:40.518-03:00  INFO 16824 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.dcnt.take_away_now.TakeAwayNowApplication for test class com.dcnt.take_away_now.service.PedidoServiceTest
+<pre>2024-01-23T14:32:45.209-03:00  INFO 16708 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.dcnt.take_away_now.service.PedidoServiceTest]: PedidoServiceTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2024-01-23T14:32:45.237-03:00  INFO 16708 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.dcnt.take_away_now.TakeAwayNowApplication for test class com.dcnt.take_away_now.service.PedidoServiceTest
+Hibernate: 
+    insert 
+    into
+        clientes
+        (pdc, saldo, usuario, id_cliente) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        clientes
+        (pdc, saldo, usuario, id_cliente) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        pedidos
+        (id_cliente, codigo, estado, fecha_y_hora_entrega, id_negocio, precio_total, id_pedido) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        clientes
+        (pdc, saldo, usuario, id_cliente) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    select
+        p1_0.id_pedido,
+        c1_0.id_cliente,
+        c1_0.pdc,
+        c1_0.saldo,
+        c1_0.usuario,
+        p1_0.codigo,
+        p1_0.estado,
+        p1_0.fecha_y_hora_entrega,
+        n1_0.id_negocio,
+        n1_0.dia_apertura,
+        n1_0.dia_cierre,
+        n1_0.horario_apertura,
+        n1_0.horario_cierre,
+        n1_0.nombre,
+        n1_0.saldo,
+        p1_0.precio_total 
+    from
+        pedidos p1_0 
+    left join
+        clientes c1_0 
+            on c1_0.id_cliente=p1_0.id_cliente 
+    left join
+        negocios n1_0 
+            on n1_0.id_negocio=p1_0.id_negocio 
+    where
+        p1_0.id_pedido=?
+Hibernate: 
+    insert 
+    into
+        clientes
+        (pdc, saldo, usuario, id_cliente) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        clientes
+        (pdc, saldo, usuario, id_cliente) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        pedidos
+        (id_cliente, codigo, estado, fecha_y_hora_entrega, id_negocio, precio_total, id_pedido) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
 Hibernate: 
     insert 
     into
@@ -291,6 +485,41 @@ Hibernate:
         and ir1_0.id_producto=? 
     fetch
         first ? rows only
+Hibernate: 
+    insert 
+    into
+        clientes
+        (pdc, saldo, usuario, id_cliente) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        clientes
+        (pdc, saldo, usuario, id_cliente) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        pedidos
+        (id_cliente, codigo, estado, fecha_y_hora_entrega, id_negocio, precio_total, id_pedido) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
 Hibernate: 
     insert 
     into
@@ -395,6 +624,209 @@ Hibernate:
     values
         (?, ?, default)
 Hibernate: 
+    insert 
+    into
+        clientes
+        (pdc, saldo, usuario, id_cliente) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        pedidos
+        (id_cliente, codigo, estado, fecha_y_hora_entrega, id_negocio, precio_total, id_pedido) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        clientes
+        (pdc, saldo, usuario, id_cliente) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    select
+        p1_0.id_pedido,
+        c1_0.id_cliente,
+        c1_0.pdc,
+        c1_0.saldo,
+        c1_0.usuario,
+        p1_0.codigo,
+        p1_0.estado,
+        p1_0.fecha_y_hora_entrega,
+        n1_0.id_negocio,
+        n1_0.dia_apertura,
+        n1_0.dia_cierre,
+        n1_0.horario_apertura,
+        n1_0.horario_cierre,
+        n1_0.nombre,
+        n1_0.saldo,
+        p1_0.precio_total 
+    from
+        pedidos p1_0 
+    left join
+        clientes c1_0 
+            on c1_0.id_cliente=p1_0.id_cliente 
+    left join
+        negocios n1_0 
+            on n1_0.id_negocio=p1_0.id_negocio 
+    where
+        p1_0.id_pedido=?
+Hibernate: 
+    insert 
+    into
+        clientes
+        (pdc, saldo, usuario, id_cliente) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        clientes
+        (pdc, saldo, usuario, id_cliente) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        pedidos
+        (id_cliente, codigo, estado, fecha_y_hora_entrega, id_negocio, precio_total, id_pedido) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        clientes
+        (pdc, saldo, usuario, id_cliente) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    select
+        p1_0.id_pedido,
+        c1_0.id_cliente,
+        c1_0.pdc,
+        c1_0.saldo,
+        c1_0.usuario,
+        p1_0.codigo,
+        p1_0.estado,
+        p1_0.fecha_y_hora_entrega,
+        n1_0.id_negocio,
+        n1_0.dia_apertura,
+        n1_0.dia_cierre,
+        n1_0.horario_apertura,
+        n1_0.horario_cierre,
+        n1_0.nombre,
+        n1_0.saldo,
+        p1_0.precio_total 
+    from
+        pedidos p1_0 
+    left join
+        clientes c1_0 
+            on c1_0.id_cliente=p1_0.id_cliente 
+    left join
+        negocios n1_0 
+            on n1_0.id_negocio=p1_0.id_negocio 
+    where
+        p1_0.id_pedido=?
+Hibernate: 
+    insert 
+    into
+        clientes
+        (pdc, saldo, usuario, id_cliente) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        clientes
+        (pdc, saldo, usuario, id_cliente) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        pedidos
+        (id_cliente, codigo, estado, fecha_y_hora_entrega, id_negocio, precio_total, id_pedido) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        clientes
+        (pdc, saldo, usuario, id_cliente) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
     select
         p1_0.id_producto,
         p1_0.id_inventario_registro,
@@ -616,6 +1048,90 @@ Hibernate:
     where
         ir1_0.id_negocio=? 
         and ir1_0.id_producto=?
+Hibernate: 
+    insert 
+    into
+        clientes
+        (pdc, saldo, usuario, id_cliente) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    select
+        p1_0.id_pedido,
+        c1_0.id_cliente,
+        c1_0.pdc,
+        c1_0.saldo,
+        c1_0.usuario,
+        p1_0.codigo,
+        p1_0.estado,
+        p1_0.fecha_y_hora_entrega,
+        n1_0.id_negocio,
+        n1_0.dia_apertura,
+        n1_0.dia_cierre,
+        n1_0.horario_apertura,
+        n1_0.horario_cierre,
+        n1_0.nombre,
+        n1_0.saldo,
+        p1_0.precio_total 
+    from
+        pedidos p1_0 
+    left join
+        clientes c1_0 
+            on c1_0.id_cliente=p1_0.id_cliente 
+    left join
+        negocios n1_0 
+            on n1_0.id_negocio=p1_0.id_negocio 
+    where
+        p1_0.id_pedido=?
+Hibernate: 
+    insert 
+    into
+        clientes
+        (pdc, saldo, usuario, id_cliente) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        clientes
+        (pdc, saldo, usuario, id_cliente) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        pedidos
+        (id_cliente, codigo, estado, fecha_y_hora_entrega, id_negocio, precio_total, id_pedido) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
 Hibernate: 
     insert 
     into
@@ -927,6 +1443,41 @@ Hibernate:
     values
         (?, ?, default)
 Hibernate: 
+    insert 
+    into
+        clientes
+        (pdc, saldo, usuario, id_cliente) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        pedidos
+        (id_cliente, codigo, estado, fecha_y_hora_entrega, id_negocio, precio_total, id_pedido) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        clientes
+        (pdc, saldo, usuario, id_cliente) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
     select
         p1_0.id_producto,
         p1_0.id_inventario_registro,
@@ -1026,6 +1577,55 @@ Hibernate:
     values
         (?, ?, default)
 Hibernate: 
+    select
+        p1_0.id_pedido,
+        c1_0.id_cliente,
+        c1_0.pdc,
+        c1_0.saldo,
+        c1_0.usuario,
+        p1_0.codigo,
+        p1_0.estado,
+        p1_0.fecha_y_hora_entrega,
+        n1_0.id_negocio,
+        n1_0.dia_apertura,
+        n1_0.dia_cierre,
+        n1_0.horario_apertura,
+        n1_0.horario_cierre,
+        n1_0.nombre,
+        n1_0.saldo,
+        p1_0.precio_total 
+    from
+        pedidos p1_0 
+    left join
+        clientes c1_0 
+            on c1_0.id_cliente=p1_0.id_cliente 
+    left join
+        negocios n1_0 
+            on n1_0.id_negocio=p1_0.id_negocio 
+    where
+        p1_0.id_pedido=?
+Hibernate: 
+    insert 
+    into
+        clientes
+        (pdc, saldo, usuario, id_cliente) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
     insert 
     into
         pedidos
@@ -1057,6 +1657,76 @@ Hibernate:
         p1_0.precio_total 
     from
         pedidos p1_0
+Hibernate: 
+    insert 
+    into
+        clientes
+        (pdc, saldo, usuario, id_cliente) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        clientes
+        (pdc, saldo, usuario, id_cliente) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        pedidos
+        (id_cliente, codigo, estado, fecha_y_hora_entrega, id_negocio, precio_total, id_pedido) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        clientes
+        (pdc, saldo, usuario, id_cliente) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        negocios
+        (dia_apertura, dia_cierre, horario_apertura, horario_cierre, nombre, saldo, id_negocio) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        productos
+        (id_inventario_registro, nombre, id_producto) 
+    values
+        (?, ?, default)
+Hibernate: 
+    insert 
+    into
+        clientes
+        (pdc, saldo, usuario, id_cliente) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    insert 
+    into
+        pedidos
+        (id_cliente, codigo, estado, fecha_y_hora_entrega, id_negocio, precio_total, id_pedido) 
+    values
+        (?, ?, ?, ?, ?, ?, default)
 </pre>
 </span>
 </div>
@@ -1068,7 +1738,7 @@ Hibernate:
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 8.5</a> at 22 ene. 2024 20:31:41</p>
+<a href="http://www.gradle.org">Gradle 8.5</a> at 23 ene 2024 14:32:46</p>
 </div>
 </div>
 </body>

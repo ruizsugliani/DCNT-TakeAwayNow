@@ -1,8 +1,12 @@
 package com.dcnt.take_away_now.controller;
 
 import com.dcnt.take_away_now.domain.Negocio;
+import com.dcnt.take_away_now.dto.InventarioRegistroDto;
 import com.dcnt.take_away_now.repository.NegocioRepository;
+import com.dcnt.take_away_now.repository.ProductoRepository;
 import com.dcnt.take_away_now.service.NegocioService;
+import com.dcnt.take_away_now.value_object.Dinero;
+import com.dcnt.take_away_now.value_object.PuntosDeConfianza;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +24,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import javax.swing.text.html.Option;
 import java.time.DayOfWeek;
 import java.util.Arrays;
 import java.util.Optional;
@@ -44,13 +49,15 @@ class NegocioControllerTest {
 
     @MockBean
     private NegocioRepository negocioRepository;
+    @MockBean
+    private ProductoRepository productoRepository;
     private DayOfWeek DiaDeApertura;
     private DayOfWeek DiaDeCierre;
     private int HoraApertura;
     private int MinutoApertura;
     private int HoraCierre;
     private int MinutoCierre;
-    String jsonString;
+    private String nombrePaseoColon;
     @BeforeEach
     void setUp() {
         DiaDeApertura = DayOfWeek.MONDAY;
@@ -59,9 +66,7 @@ class NegocioControllerTest {
         MinutoApertura = 0;
         HoraCierre = 18;
         MinutoCierre = 0;
-        jsonString = "{ \"nombre\" : \"Paseo Colon\", \"diaDeApertura\" : " + DiaDeApertura + ", \"diaDeCierre\" : " + DiaDeCierre +
-                ", \"horaApertura\" : " + HoraApertura + ", \"minutoApertura\" : " + MinutoApertura +
-                ", \"horaCierre\" : " + HoraCierre + ", \"minutoCierre\" : " + MinutoCierre + " }";
+        nombrePaseoColon = "Buffet Paseo Colon";
     }
 
     @Test
@@ -97,17 +102,9 @@ class NegocioControllerTest {
     @Test
     void sePuedeCrearProductoNuevo() throws Exception {
         //given
-        mockMvc.perform(post("/api/negocios/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .param("nombre", "Paseo Colon")
-                .param("diaDeApertura", String.valueOf(DiaDeApertura))
-                .param("diaDeCierre", String.valueOf(DiaDeCierre))
-                .param("horaApertura", String.valueOf(HoraApertura))
-                .param("minutoApertura", String.valueOf(MinutoApertura))
-                .param("horaCierre", String.valueOf(HoraCierre))
-                .param("minutoCierre", String.valueOf(MinutoCierre))
-        );
+        negocioService.crearNegocio(nombrePaseoColon, DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
 
+        //TODO REVISAR TODOS LOS IDS HARDOCEADOS
         ResultActions response = mockMvc.perform(post("/api/negocios/" + 1 + "/productos/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("nombreDelProducto", "Pancho")
@@ -123,25 +120,12 @@ class NegocioControllerTest {
     @Test
     void noSePuedeCrearProductoQueYaExisteEnEseNegocio() throws Exception {
         //given
-        mockMvc.perform(post("/api/negocios/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .param("nombre", "Paseo Colon")
-                .param("diaDeApertura", String.valueOf(DiaDeApertura))
-                .param("diaDeCierre", String.valueOf(DiaDeCierre))
-                .param("horaApertura", String.valueOf(HoraApertura))
-                .param("minutoApertura", String.valueOf(MinutoApertura))
-                .param("horaCierre", String.valueOf(HoraCierre))
-                .param("minutoCierre", String.valueOf(MinutoCierre))
-        );
+        negocioService.crearNegocio(nombrePaseoColon, DiaDeApertura, DiaDeCierre,HoraApertura, MinutoApertura, HoraCierre, MinutoCierre);
+        InventarioRegistroDto inventarioRegistroDto = new InventarioRegistroDto(10L, new Dinero(100), new PuntosDeConfianza(20));
+        Optional<Negocio> negocio = negocioRepository.findByNombre(nombrePaseoColon);
+        negocioService.crearProducto(negocio.get().getId(), "Pancho",inventarioRegistroDto);
 
-        mockMvc.perform(post("/api/negocios/" + 1 + "/productos/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .param("nombreDelProducto", "Pancho")
-                .param("stock", "5")
-                .param("precio", "100")
-                .param("recompensaPuntosDeConfianza", "20")
-        );
-
+        //when
         ResultActions response = mockMvc.perform(post("/api/negocios/" + 1 + "/productos/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("nombreDelProducto", "Pancho")

@@ -100,9 +100,10 @@ public class PedidoService {
         // Actualizamos el saldo y los puntos de confianza del cliente.
         cliente.setSaldo(cliente.getSaldo().minus(precioTotalDelPedido));
 
-        //TODO VERIFICAR CONDICION Y MOVER ESTA LOGICA AL RETIRAR EL PEDIDO
         if (cliente.getPuntosDeConfianza() != null) {
             cliente.setPuntosDeConfianza(cliente.getPuntosDeConfianza().plus(pdcTotalDelPedido));
+        } else {
+            cliente.setPuntosDeConfianza(pdcTotalDelPedido);
         }
 
         // Actualizamos el saldo del negocio.
@@ -156,9 +157,6 @@ public class PedidoService {
         if (pedido.estado != EstadoDelPedido.LISTO_PARA_RETIRAR) {
             throw new IllegalStateException("No se puede retirar dicho pedido ya que el mismo no se encuentra listo para retirar.");
         }
-
-        // TODO El cliente obtiene los PDC en función de los productos que estén en el pedido.
-
         // Actualizamos el estado del pedido y se establece la fecha y hora de entrega.
         pedido.setFechaYHoraDeEntrega(LocalDateTime.now());
         pedido.setEstado(EstadoDelPedido.RETIRADO);
@@ -176,26 +174,23 @@ public class PedidoService {
 
         Cliente c = clienteRepository.findById(pedido.getCliente().getId()).orElseThrow( () -> new RuntimeException("Ocurrió un error al obtener los datos del cliente."));
 
-        // TODO En caso de que el estado sea AGUARDANDO_PREPARACION, entonces el cliente pierde puntos de confianza (levemente, podría ser un 5% del total que posee) pero recupera su dinero.
+        // En caso de que el estado sea AGUARDANDO_PREPARACION, entonces el cliente pierde puntos de confianza (levemente, un 5% del total que posee) pero recupera su dinero.
         if (pedido.getEstado() == EstadoDelPedido.AGUARDANDO_PREPARACION) {
             c.setPuntosDeConfianza(c.getPuntosDeConfianza().minus(c.getPuntosDeConfianza().multiply(0.05)));
             c.setSaldo(c.getSaldo().plus(pedido.getPrecioTotal()));
-        }
-
-        // TODO En caso de que el estado sea EN_PREPARACION, entonces el cliente pierde puntos de confianza (notablemente, podría ser un 20% del total que posee), no recupera su dinero.
-        if (pedido.getEstado() == EstadoDelPedido.EN_PREPARACION) {
+        } else if (pedido.getEstado() == EstadoDelPedido.EN_PREPARACION) {
+            //En caso de que el estado sea EN_PREPARACION, entonces el cliente pierde puntos de confianza (notablemente, un 20% del total que posee), no recupera su dinero.
             c.setPuntosDeConfianza(
                     c.getPuntosDeConfianza().minus(c.getPuntosDeConfianza().multiply(0.20)));
-        }
-
-        // TODO En caso de que el estado sea LISTO_PARA_RETIRAR, entonces el cliente pierde puntos de confianza (significativamente, pierde un 100% del total que posee), no recupera su dinero.
-        if (pedido.getEstado() == EstadoDelPedido.LISTO_PARA_RETIRAR) {
+        } else if(pedido.getEstado() == EstadoDelPedido.LISTO_PARA_RETIRAR) {
+            //En caso de que el estado sea LISTO_PARA_RETIRAR, entonces el cliente pierde puntos de confianza (significativamente, pierde un 100% del total que posee), no recupera su dinero.
             c.setPuntosDeConfianza(new PuntosDeConfianza((double) 0));
         }
 
         clienteRepository.save(c);
 
-        // TODO se actualiza el stock de cada producto
+        // Se actualiza el stock de cada producto
+        devolverStockDeUnPedidoDevueltoOCancelado(pedido);
 
         // Actualizamos el estado del pedido.
         pedido.setEstado(EstadoDelPedido.CANCELADO);
@@ -218,11 +213,31 @@ public class PedidoService {
         Cliente c = clienteRepository.findById(pedido.getCliente().getId()).orElseThrow( () -> new RuntimeException("Ocurrió un error al reintegrar el total del pedido al cliente."));
         c.setSaldo(c.getSaldo().plus(pedido.getPrecioTotal()));
 
-        // TODO se actualiza el stock de cada producto
+        // Se actualiza el stock de cada producto
+        devolverStockDeUnPedidoDevueltoOCancelado(pedido);
 
         // Actualizamos el estado del pedido.
         pedido.setEstado(EstadoDelPedido.DEVUELTO);
         pedidoRepository.save(pedido);
         return ResponseEntity.accepted().build();
+    }
+
+    private void devolverStockDeUnPedidoDevueltoOCancelado(Pedido pedido) {
+        if (pedido.getProductosPedidos() == null) return;
+
+        Negocio negocio = pedido.getNegocio();
+
+        //Se actualiza el stock de cada producto
+        for (ProductoPedido entry : pedido.getProductosPedidos()) {
+            Integer cantidadPedida = entry.getCantidad();
+            Producto producto = productoRepository.findById(entry.getId()).get();
+
+            InventarioRegistro inventarioRegistro = inventarioRegistroRepository.findByNegocioAndProducto(negocio, producto).orElseThrow( () -> new RuntimeException("Ocurrió un error con el producto "+ producto.getNombre() +" al confirmar el pedido.") );
+
+            inventarioRegistro.setStock(inventarioRegistro.getStock() + cantidadPedida);
+
+            // Actualizamos el InventarioRegistro con el nuevo stock.
+            inventarioRegistroRepository.save(inventarioRegistro);
+        }
     }
 }
