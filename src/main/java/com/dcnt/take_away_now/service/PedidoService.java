@@ -2,6 +2,7 @@ package com.dcnt.take_away_now.service;
 
 import com.dcnt.take_away_now.domain.*;
 import com.dcnt.take_away_now.dto.InfoPedidoDto;
+import com.dcnt.take_away_now.dto.ProductoPedidoDto;
 import com.dcnt.take_away_now.enums.EstadoDelPedido;
 import com.dcnt.take_away_now.generador.GeneradorDeCodigo;
 import com.dcnt.take_away_now.repository.*;
@@ -13,7 +14,6 @@ import org.apache.hc.core5.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -187,7 +187,7 @@ public class PedidoService {
         clienteRepository.save(c);
 
         // Se actualiza el stock de cada producto
-        devolverStockDeUnPedidoDevueltoOCancelado(pedido);
+        devolverStockDeUnPedido(pedido);
 
         // Actualizamos el estado del pedido.
         pedido.setEstado(EstadoDelPedido.CANCELADO);
@@ -211,7 +211,7 @@ public class PedidoService {
         c.setSaldo(c.getSaldo().plus(pedido.getPrecioTotal()));
 
         // Se actualiza el stock de cada producto
-        devolverStockDeUnPedidoDevueltoOCancelado(pedido);
+        devolverStockDeUnPedido(pedido);
 
         // Actualizamos el estado del pedido.
         pedido.setEstado(EstadoDelPedido.DEVUELTO);
@@ -219,15 +219,14 @@ public class PedidoService {
         return ResponseEntity.accepted().build();
     }
 
-    private void devolverStockDeUnPedidoDevueltoOCancelado(Pedido pedido) {
-        if (pedido.getProductosPedidos() == null) return;
-
-        Negocio negocio = pedido.getNegocio();
+    private void devolverStockDeUnPedido(Pedido pedido) {
+        Collection< ProductoPedidoDto> productoPedidoDtos = productoPedidoRepository.obtenerProductosDelPedido(pedido.getId());
 
         //Se actualiza el stock de cada producto
-        for (ProductoPedido entry : pedido.getProductosPedidos()) {
+        for (ProductoPedidoDto entry : productoPedidoDtos) {
             Integer cantidadPedida = entry.getCantidad();
-            InventarioRegistro inventarioRegistro = inventarioRegistroRepository.findByNegocioAndProducto(negocio, entry.getProducto()).orElseThrow( () -> new RuntimeException("Ocurrió un error con el producto "+ entry.getProducto().getNombre() +" al confirmar el pedido.") );
+            Producto p = entry.getProducto();
+            InventarioRegistro inventarioRegistro = inventarioRegistroRepository.findByNegocioAndProducto(pedido.getNegocio(), p).orElseThrow( () -> new RuntimeException("Ocurrió un error con el producto "+ entry.getProducto().getNombre() +" al confirmar el pedido.") );
 
             inventarioRegistro.setStock(inventarioRegistro.getStock() + cantidadPedida);
 

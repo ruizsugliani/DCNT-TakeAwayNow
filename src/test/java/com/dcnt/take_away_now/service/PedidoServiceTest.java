@@ -563,7 +563,6 @@ class PedidoServiceTest {
                 .hasMessageContaining("No se puede devolver dicho pedido ya que el mismo no se encontraba retirado.");
     }
 
-    /*
     @Test
     void cuandoSeDevuelveUnPedidoSeLeDevuelveElSaldoAlClienteYElStockDeLosProductos() {
         //given
@@ -589,7 +588,6 @@ class PedidoServiceTest {
             pedidoService.marcarComienzoDePreparacion(entry.getIdPedido());
             pedidoService.marcarPedidoListoParaRetirar(entry.getIdPedido());
             pedidoService.confirmarRetiroDelPedido(entry.getIdPedido());
-            //TODO VERIFICAR POR QUE NO EXISTE PRODUCTOPEDIDO
             pedidoService.devolverPedido(entry.getIdPedido());
         }
 
@@ -603,5 +601,5 @@ class PedidoServiceTest {
 
         assertThat(saldoPostConfirmarPedido).isEqualTo(new Dinero(100));
         assertThat(saldoPostCancelacion).isEqualTo(new Dinero(1000));
-    }*/
+    }
 }
