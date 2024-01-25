@@ -145,6 +145,7 @@ public class PedidoService {
             throw new IllegalStateException("No se puede marcar dicho pedido como lista para retirar ya que el mismo no se encuentra en preparación.");
         }
         pedido.setEstado(EstadoDelPedido.LISTO_PARA_RETIRAR);
+        pedido.setCodigoDeRetiro(GeneradorDeCodigo.generarCodigoAleatorio());
         pedidoRepository.save(pedido);
         return ResponseEntity.accepted().build();
     }
@@ -157,7 +158,6 @@ public class PedidoService {
         // Actualizamos el estado del pedido y se establece la fecha y hora de entrega.
         pedido.setFechaYHoraDeEntrega(LocalDateTime.now());
         pedido.setEstado(EstadoDelPedido.RETIRADO);
-        pedido.setCodigo(GeneradorDeCodigo.generarCodigoAleatorio());
         pedidoRepository.save(pedido);
         return ResponseEntity.accepted().build();
     }

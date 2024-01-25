@@ -32,7 +32,7 @@ public class Pedido {
     public LocalDateTime fechaYHoraDeEntrega;
 
     @Column(name="CODIGO")
-    public String codigo;
+    public String codigoDeRetiro;
 
     @JsonBackReference
     @OneToMany(targetEntity = ProductoPedido.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "pedido")
